@@ -73,14 +73,14 @@ def registreren():
             print("Telefoonnummer klopt niet..")
 
     wachtwoord = input("Wachtwoord: ")
-    fietsnummer = int(random.randint(1000, 10000))
+    fietsnummer = int(random.randint(1000, 9999))
 
     fietsnummer_lijst = []
     for gegeven in gegevens:
         fietsnummer_lijst.append(gegeven['fietsnummer'])
 
     while str(fietsnummer) in fietsnummer_lijst:
-        fietsnummer = int(random.randint(1000, 10000))
+        fietsnummer = int(random.randint(1000, 9999))
 
     nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
