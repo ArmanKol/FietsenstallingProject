@@ -43,4 +43,35 @@ def inloggen():
     if pogingen == 0:
         print("Uw heeft te vaak geprobeert in te loggen.")
 
+
+def registreren():
+    import random
+
+    bestand = open('database/gebruikers.csv', 'r')
+    inhoud = bestand.read()
+    inhoud_regels = inhoud.split('\n')
+    bestand.close()
+
+    naam = input("Voornaam: ")
+    tussenvoegsel = input("Tussenvoegsel: ")
+    achternaam = input("Achternaam: ")
+    mail = input("E-mail adres: ")
+    telefoonnummer = input("Telefoon nummer: ")
+    wachtwoord = input("Wachtwoord: ")
+    fietsnummer = int(random.randint(0, 99999))
+
+    #for nummer in telefoonnummer:
+    #    if nummer not in '0123456789':
+    #        print("Telefoonnummer niet correct..")
+    #        telefoonnummer = input("Telefoon nummer: ")
+
+    while fietsnummer in inhoud_regels:
+        fietsnummer = int(random.randint(0, 99999))
+
+    gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
+
+    bestand = open('database/gebruikers.csv', 'a')
+    bestand.write(gegevens + '\n')
+    bestand.close()
+
 inloggen()
