@@ -1,3 +1,3 @@
-fietsnummer;voornaam;tussenvoegsel;achternaam;mail;telefoonummer
-1234;Peter;;Vries;peterdevries@gmail.com;wachtwoord;0612345678
-8765;Daan;de;Man;peterdevries@gmail.com;password;0687654321
+fietsnummer;voornaam;tussenvoegsel;achternaam;mail;wachtwoord;telefoonummer
+1234;Peter;;Vries;petervries@gmail.com;wachtwoord;0612345678
+8765;Daan;de;Man;daandeman@gmail.com;password;0687654321
