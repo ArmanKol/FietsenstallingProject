@@ -51,36 +51,40 @@ def registreren():
     gegevens = csvread()
 
     mail = input("E-mail adres: ")
+    mail_lijst = []
 
     for gegeven in gegevens:
-        if mail != gegeven['mail']:
-            pass
-        else:
-            print("Dit e-mail adres is al in gebruik.. ")
-            mail = input("E-mail adres: ")
+        mail_lijst.append(gegeven['mail'])
+
+    while mail in mail_lijst:
+        print("Dit e-mail adress is al geregistreerd")
+        mail = input("E-mail adres: ")
 
     naam = input("Voornaam: ")
     tussenvoegsel = input("Tussenvoegsel: ")
     achternaam = input("Achternaam: ")
-    telefoonnummer = str(input("Telefoon nummer: "))
 
-    #for nummer in telefoonnummer:
-    #    if nummer not in '0123456789':
-    #        print("Telefoonnummer niet correct..")
-    #        telefoonnummer = input("Telefoon nummer: ")
+    while True:
+        try:
+            telefoonnummer = int(input("Telefoon nummer: "))
+            break
+        except:
+            print("Telefoonnummer klopt niet..")
+
 
     wachtwoord = input("Wachtwoord: ")
     fietsnummer = int(random.randint(0, 10))
 
-    #while True:
-    #    for gegeven in gegevens:
-    #        if str(fietsnummer) != gegeven['fietsnummer']:
-    #            print("aangemaakt")
-    #            break
-    #        else:
-    #            print("aangepast")
-    #            fietsnummer = int(random.randint(0, 10))
+    fietsnummer_lijst = []
 
+    for gegeven in gegevens:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+
+    while str(fietsnummer) in fietsnummer_lijst:
+        fietsnummer = int(random.randint(0, 10))
+        print('Nieuw nummer')
+
+    print(fietsnummer_lijst)
     nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
     bestand = open('database/gebruikers.csv', 'a')
