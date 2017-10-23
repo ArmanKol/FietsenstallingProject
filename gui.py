@@ -12,7 +12,6 @@ registrerenknop = tkinter.Button(master=root, text="Fiets registreren")
 registrerenknop.pack()
 
 
-
 ophalenKnop = tkinter.Button(master=root, text="Fiets ophalen")
 ophalenKnop.pack()
 
