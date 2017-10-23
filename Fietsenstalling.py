@@ -1,4 +1,6 @@
 import csv
+import random
+
 
 def csvread():
     with open("database/gebruikers.csv", "r") as ReadMyCsv:
@@ -45,33 +47,44 @@ def inloggen():
 
 
 def registreren():
-    import random
+    """Functie voor het registreren van de gebruiker. Slaat de gegevens op in gebruikers.csv"""
+    gegevens = csvread()
 
-    bestand = open('database/gebruikers.csv', 'r')
-    inhoud = bestand.read()
-    inhoud_regels = inhoud.split('\n')
-    bestand.close()
+    mail = input("E-mail adres: ")
+
+    for gegeven in gegevens:
+        if mail != gegeven['mail']:
+            pass
+        else:
+            print("Dit e-mail adres is al in gebruik.. ")
+            mail = input("E-mail adres: ")
 
     naam = input("Voornaam: ")
     tussenvoegsel = input("Tussenvoegsel: ")
     achternaam = input("Achternaam: ")
-    mail = input("E-mail adres: ")
-    telefoonnummer = input("Telefoon nummer: ")
-    wachtwoord = input("Wachtwoord: ")
-    fietsnummer = int(random.randint(0, 99999))
+    telefoonnummer = str(input("Telefoon nummer: "))
 
     #for nummer in telefoonnummer:
     #    if nummer not in '0123456789':
     #        print("Telefoonnummer niet correct..")
     #        telefoonnummer = input("Telefoon nummer: ")
 
-    while fietsnummer in inhoud_regels:
-        fietsnummer = int(random.randint(0, 99999))
+    wachtwoord = input("Wachtwoord: ")
+    fietsnummer = int(random.randint(0, 10))
 
-    gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
+    #while True:
+    #    for gegeven in gegevens:
+    #        if str(fietsnummer) != gegeven['fietsnummer']:
+    #            print("aangemaakt")
+    #            break
+    #        else:
+    #            print("aangepast")
+    #            fietsnummer = int(random.randint(0, 10))
+
+    nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
     bestand = open('database/gebruikers.csv', 'a')
-    bestand.write(gegevens + '\n')
+    bestand.write(nieuwe_gegevens + '\n')
     bestand.close()
 
-inloggen()
+registreren()
