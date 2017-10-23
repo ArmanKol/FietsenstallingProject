@@ -2,8 +2,8 @@ import csv
 import random
 
 
-def csvread():
-    with open("database/gebruikers.csv", "r") as ReadMyCsv:
+def csvread(bestandsnaam):
+    with open("database/" + bestandsnaam, "r") as ReadMyCsv:
         reader = csv.DictReader(ReadMyCsv, delimiter=";")
 
         gegevens = []
@@ -13,44 +13,9 @@ def csvread():
     return gegevens
 
 
-def inloggen():
-    correctLogin = 0
-    pogingen = 5
-    gegevens = csvread()
-
-    while correctLogin != 1:
-        if pogingen == 0:
-            break
-        mail = str(input("Geef je e-mailadres: "))
-        wachtwoord = str(input("Geef je wachtwoord: "))
-        lengte_lijst = 0
-        for gegeven in gegevens:
-            if mail == gegeven["mail"]:
-                if wachtwoord == "":
-                    print("Er is geen wachtwoord ingevoerd.")
-                    break
-                if wachtwoord == gegeven["wachtwoord"]:
-                    print("Combinatie klopt.")
-                    correctLogin = 1
-                    break
-                else:
-                    print("De combinatie is niet goed.")
-                    pogingen -= 1
-                    if pogingen != 0:
-                        print("U heeft nog " + str(pogingen) + " pogingen over.")
-            else:
-                if lengte_lijst == (len(gegevens)-1):
-                    print("Het e-mailadres is niet gevonden.")
-                lengte_lijst += 1
-                pass
-
-    if pogingen == 0:
-        print("Uw heeft te vaak geprobeert in te loggen.")
-
-
 def registreren():
     """Functie voor het registreren van de gebruiker. Slaat de gegevens op in gebruikers.csv"""
-    gegevens = csvread()
+    gegevens = csvread("gebruikers.csv")
 
     mail = input("E-mail adres: ")
     mail_lijst = []
@@ -84,7 +49,81 @@ def registreren():
 
     nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
-    bestand = open('database/gebruikers.csv', 'a')
+    bestand = open('database/gebruikers.csv', 'a') #nog in een fucntie zetten?
     bestand.write(nieuwe_gegevens + '\n')
     bestand.close()
 
+
+def persoonlijke_informatie_opvragen():
+    print("U moet eerst inloggen om deze gegevens te mogen bekijken.")
+    correctLogin = 0
+
+    while correctLogin == 0:
+        correctLogin = inloggen()
+
+    gegevens = csvread("gebruikers.csv")
+    stalling_gegevens = csvread("gestald.csv")
+
+    for gegeven in gegevens:
+        if mail == gegeven["mail"]:
+            if gegeven["tussenvoegsel"] == "":
+                print("Uw volledige naam: " + gegeven["voornaam"] + " " + gegeven["achternaam"])
+            else:
+                print("Uw volledige naam: " + gegeven["voornaam"] + " " + gegeven["tussenvoegsel"] + " " + gegeven[
+                    "achternaam"])
+            print("Uw unieke fietsnummer is: " + gegeven["fietsnummer"])
+            print("Uw e-mail adres is: " + gegeven["mail"])
+            print("Uw telefoonnummer is: " + gegeven["telefoonnummer"])
+
+        for fietsdata in stalling_gegevens:
+            if gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
+                data = fietsdata["staldata"]
+
+    print("En dan nog iets doen met -> " + data)
+
+
+def algemene_informatie_aanvragen():
+    gegevens = csvread("gestald.csv")
+
+    vrije_plekken = 1000 - (len(gegevens) + 1)
+
+    print("Er zijn nog " + str(vrije_plekken) + " van de 1000 plekken over.")
+    print("De kosten voor het bergen van uw fiets zijn 0.10 euro per uur.")
+
+
+def inloggen():
+    correctLogin = 0
+    pogingen = 5
+    gegevens = csvread("gebruikers.csv")
+
+    while correctLogin != 1:
+        if pogingen == 0:
+            break
+        global mail
+        mail = str(input("Geef je e-mailadres: "))
+        wachtwoord = str(input("Geef je wachtwoord: "))
+        lengte_lijst = 0
+        for gegeven in gegevens:
+            if mail == gegeven["mail"]:
+                if wachtwoord == "":
+                    print("Er is geen wachtwoord ingevoerd.")
+                    break
+                if wachtwoord == gegeven["wachtwoord"]:
+                    print("Combinatie klopt.")
+                    correctLogin = 1
+                    break
+                else:
+                    print("De combinatie is niet goed.")
+                    pogingen -= 1
+                    if pogingen != 0:
+                        print("U heeft nog " + str(pogingen) + " pogingen over.")
+            else:
+                if lengte_lijst == len(gegevens):
+                    print("Het e-mailadres is niet gevonden.")
+                lengte_lijst += 1
+                pass
+
+    if pogingen == 0:
+        print("Uw heeft te vaak geprobeert in te loggen.")
+
+registreren()
