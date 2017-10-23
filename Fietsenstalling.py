@@ -73,7 +73,7 @@ def registreren():
 
 
     wachtwoord = input("Wachtwoord: ")
-    fietsnummer = int(random.randint(0, 10))
+    fietsnummer = int(random.randint(1000, 10000))
 
     fietsnummer_lijst = []
 
@@ -81,8 +81,7 @@ def registreren():
         fietsnummer_lijst.append(gegeven['fietsnummer'])
 
     while str(fietsnummer) in fietsnummer_lijst:
-        fietsnummer = int(random.randint(0, 10))
-        print('Nieuw nummer')
+        fietsnummer = int(random.randint(1000, 10000))
 
     print(fietsnummer_lijst)
     nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
