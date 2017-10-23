@@ -17,6 +17,7 @@ def inloggen():
     correctLogin = 0
     pogingen = 5
     gegevens = csvread()
+
     while correctLogin != 1:
         if pogingen == 0:
             break
@@ -42,6 +43,7 @@ def inloggen():
                     print("Het e-mailadres is niet gevonden.")
                 lengte_lijst += 1
                 pass
+
     if pogingen == 0:
         print("Uw heeft te vaak geprobeert in te loggen.")
 
@@ -52,7 +54,6 @@ def registreren():
 
     mail = input("E-mail adres: ")
     mail_lijst = []
-
     for gegeven in gegevens:
         mail_lijst.append(gegeven['mail'])
 
@@ -71,23 +72,19 @@ def registreren():
         except:
             print("Telefoonnummer klopt niet..")
 
-
     wachtwoord = input("Wachtwoord: ")
     fietsnummer = int(random.randint(1000, 10000))
 
     fietsnummer_lijst = []
-
     for gegeven in gegevens:
         fietsnummer_lijst.append(gegeven['fietsnummer'])
 
     while str(fietsnummer) in fietsnummer_lijst:
         fietsnummer = int(random.randint(1000, 10000))
 
-    print(fietsnummer_lijst)
     nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
     bestand = open('database/gebruikers.csv', 'a')
     bestand.write(nieuwe_gegevens + '\n')
     bestand.close()
 
-registreren()
