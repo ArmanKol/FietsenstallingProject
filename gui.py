@@ -106,8 +106,8 @@ ophalenmenuFrame.pack()
 
 knopterugOphalen = tkinter.Button(master=ophalenmenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugOphalen.pack()
-#Informatie opvragen
 
+#Informatie opvragen
 informatiemenuFrame = tkinter.Frame(root)
 informatiemenuFrame.configure(background="yellow")
 informatiemenuFrame.pack()
