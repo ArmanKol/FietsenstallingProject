@@ -167,7 +167,6 @@ email_entry.grid(row=3, column=1)
 
 knopregistreer = tkinter.Button(master=registermenuFrame, text="Registreer", command=registreren)
 knopregistreer.grid(row=4, column=1, pady=5)
-print(naam_entry, wachtwoord_entry, telefoonnummer_entry, email_entry)
 
 knopterugRegistreren = tkinter.Button(master=registermenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugRegistreren.grid(row=4, column=0, pady=5)
