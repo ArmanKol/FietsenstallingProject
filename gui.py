@@ -176,7 +176,7 @@ stallenmenuFrame = tkinter.Frame(root)
 stallenmenuFrame.configure(background="yellow")
 stallenmenuFrame.pack()
 
-inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je naam/e-mailadres in: ", background="yellow")
+inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamStallen_label.grid(row=0, column=0, pady=5)
 
 inlogNaamStallen_entry = tkinter.Entry(master=stallenmenuFrame)
@@ -199,7 +199,7 @@ ophalenmenuFrame = tkinter.Frame(root)
 ophalenmenuFrame.configure(background="yellow")
 ophalenmenuFrame.pack()
 
-inlogNaamOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je naam/e-mailadres in: ", background="yellow")
+inlogNaamOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamOphalen_label.grid(row=0, column=0, pady=5)
 
 inlogNaamOphalen_entry = tkinter.Entry(master=ophalenmenuFrame)
