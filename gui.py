@@ -39,10 +39,10 @@ def registreren():
     wachtwoord = wachtwoord_entry.get()
 
     while len(wachtwoord) <= 6:
-        berichtantwoord = tkinter.messagebox.askquestion("","U heeft een te korte wachtwoord ingevoerd. Wilt u doorgaan?")
-        if berichtantwoord == "yes":
+        teKorteWachtwoordPopup = tkinter.messagebox.askquestion("","U heeft een te korte wachtwoord ingevoerd. Wilt u het opnieuw proberen?")
+        if teKorteWachtwoordPopup == "yes":
             return toonRegisterFrame()
-        if berichtantwoord == "no":
+        if teKorteWachtwoordPopup == "no":
             return toonHoofdFrame()
 
     fietsnummer = int(random.randint(1000, 9999))
