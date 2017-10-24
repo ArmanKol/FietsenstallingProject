@@ -91,6 +91,10 @@ def ophalen_fiets():
             print("Fiets staat niet in stalling..")
 
         else:
+            for item in gegevens_stalling:
+                if response_inloggen == (item['fietsnummer']):
+                    gegevens_stalling.pop()
+            print(gegevens_stalling)
 
             #bestand = open('database/gestald.csv', 'w')
 
