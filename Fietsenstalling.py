@@ -126,7 +126,7 @@ def inloggen():
     return 0
 
 
-def stallen():
+def stallen_fiets():
     vandaag = datetime.datetime.today()
     datum = vandaag.strftime('%d/%m/%Y')
     gegevens_gestald = csvread('gestald.csv')
