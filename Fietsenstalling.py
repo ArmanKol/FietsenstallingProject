@@ -128,9 +128,8 @@ def inloggen():
 
 def stallen():
     vandaag = datetime.datetime.today()
-    datum = vandaag.strftime('/%d/%m/%Y')
-    tijd = vandaag.strftime('%H/%M')
-    gegevens = csvread('gestald.csv')
+    datum = vandaag.strftime('%d/%m/%Y')
+    gegevens_gestald = csvread('gestald.csv')
     response_inloggen = inloggen()
 
     if response_inloggen != 0:
@@ -144,7 +143,7 @@ def stallen():
             pogingen_fietsnummer += 1
 
         fietsnummer_lijst = []
-        for gegeven in gegevens:
+        for gegeven in gegevens_gestald:
             fietsnummer_lijst.append(gegeven['fietsnummer'])
 
         if fietsnummer in fietsnummer_lijst:
@@ -152,7 +151,7 @@ def stallen():
 
         else:
             print("Fiets kan gestald worden..")
-            gegevens_stalling = str(fietsnummer) + ";" + tijd + datum
+            gegevens_stalling = str(fietsnummer) + ";" + datum
 
             bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
             bestand.write(gegevens_stalling + '\n')
