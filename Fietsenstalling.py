@@ -95,7 +95,6 @@ def persoonlijke_informatie_opvragen():
     print("Er moet \u20ac" + prijs + " worden betaald.")
 
 
-
 def algemene_informatie_aanvragen():
     gegevens = csvread("gestald.csv")
 
@@ -159,4 +158,43 @@ def stallen_fiets():
 
     else:
         print("Fiets kan niet gestald worden..")
+
+
+def ophalen_fiets():
+    gegevens_stalling = csvread('gestald.csv')
+    response_inloggen = inloggen()
+
+    if response_inloggen != 0:
+
+        fietsnummer = input("Fietsnummer: ")
+
+        pogingen_fietsnummer = 0
+        while str(fietsnummer) != response_inloggen and pogingen_fietsnummer < 5:
+            print(str(fietsnummer) + " is niet geregistreerd.. Probeer opnieuw..")
+            fietsnummer = input("Fietsnummer: ")
+            pogingen_fietsnummer += 1
+
+        fietsnummer_lijst = []
+        for gegeven in gegevens_stalling:
+            fietsnummer_lijst.append(gegeven['fietsnummer'])
+
+        if fietsnummer not in fietsnummer_lijst:
+            print("Fiets staat niet in stalling.. ")
+
+        else:
+            for fiets in gegevens_stalling:
+                if fiets['fietsnummer'] == response_inloggen:
+                    gegevens_stalling.remove(fiets)
+                    print("Fiets kan opgehaald worden.. ")
+
+            with open("database/gestald.csv", "w", newline='\n') as WriteMyCsv:
+                veldnamen = ["fietsnummer", "staldatum"]
+                writer = csv.DictWriter(WriteMyCsv, fieldnames=veldnamen, delimiter=";")
+                writer.writeheader()
+
+                for gegeven in gegevens_stalling:
+                    writer.writerow((gegeven))
+
+    else:
+        print("Fiets kan niet opgehaald worden..")
 
