@@ -110,17 +110,17 @@ def inloggen():
     gegevens_gebruiker = csvread("gebruikers.csv")
     mail = str(input("Geef je e-mailadres: "))
     wachtwoord = str(input("Geef je wachtwoord: "))
-    counter = 0
+    counter = 3
 
-    while counter < 3:
+    while counter > 0:
         for item in gegevens_gebruiker:
             if str(item['wachtwoord']) == wachtwoord and str(item['mail']) == mail:
                 return (str(item['fietsnummer']))
         else:
-            print("Combinatie is niet correct..")
+            print("Combinatie is niet correct.. " + "Je hebt nog " + str(counter) + "inlogpogingen over..")
             mail = str(input("Geef je e-mailadres: "))
             wachtwoord = str(input("Geef je wachtwoord: "))
-            counter += 1
+            counter -= 1
 
     print("Inlogpogingen overschreden..")
     return 0
