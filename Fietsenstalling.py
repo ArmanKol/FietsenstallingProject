@@ -85,7 +85,15 @@ def persoonlijke_informatie_opvragen():
             if gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
                 data = fietsdata["staldata"]
 
-    print("En dan nog iets doen met -> " + data)
+    data = data.split("/")
+    vandaag = datetime.datetime.today()
+    datum_vandaag = datetime.date(int(vandaag.strftime("%Y")), int(vandaag.strftime("%m")), int(vandaag.strftime("%d")))
+    datum_gestald = datetime.date(int(data[2]), int(data[1]), int(data[0]))
+    aantal_dagen_gestald = datum_vandaag - datum_gestald
+    aantal_dagen_gestald = (str(aantal_dagen_gestald)).split(" ")
+    prijs = str(int(aantal_dagen_gestald[0]) * 2.5)
+    print("Er moet \u20ac" + prijs + " worden betaald.")
+
 
 
 def algemene_informatie_aanvragen():
@@ -94,7 +102,7 @@ def algemene_informatie_aanvragen():
     vrije_plekken = 1000 - (len(gegevens) + 1)
 
     print("Er zijn nog " + str(vrije_plekken) + " van de 1000 plekken over.")
-    print("De kosten voor het bergen van uw fiets zijn 0.10 euro per uur.")
+    print("De kosten voor het bergen van uw fiets zijn 0. euro per uur.")
 
 
 def inloggen():
@@ -152,3 +160,4 @@ def stallen():
 
     else:
         print("Fiets kan niet gestald worden..")
+
