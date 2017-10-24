@@ -28,8 +28,6 @@ def registreren():
         mail = input("E-mail adres: ")
 
     naam = input("Voornaam: ")
-    tussenvoegsel = input("Tussenvoegsel: ")
-    achternaam = input("Achternaam: ")
 
     while True:
         try:
@@ -53,7 +51,7 @@ def registreren():
     while str(fietsnummer) in fietsnummer_lijst:
         fietsnummer = int(random.randint(1000, 9999))
 
-    nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + tussenvoegsel + ';' + achternaam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
+    nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
     bestand = open('database/gebruikers.csv', 'a') #nog in een fucntie zetten?
     bestand.write(nieuwe_gegevens + '\n')
