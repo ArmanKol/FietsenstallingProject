@@ -1,6 +1,69 @@
 import tkinter
 import sys
-import Fietsenstalling
+import csv
+import random
+
+def csvread(bestandsnaam):
+    with open("database/" + bestandsnaam, "r") as ReadMyCsv:
+        reader = csv.DictReader(ReadMyCsv, delimiter=";")
+
+        gegevens = []
+        for gegeven in reader:
+            gegevens.append(gegeven)
+
+    return gegevens
+
+def registreren():
+    """Functie voor het registreren van de gebruiker. Slaat de gegevens op in gebruikers.csv"""
+    gegevens = csvread("gebruikers.csv")
+
+    mail = email_entry.get()
+    mail_lijst = []
+    for gegeven in gegevens:
+        mail_lijst.append(gegeven['mail'])
+
+    while mail in mail_lijst:
+        print("Dit e-mail adress is al geregistreerd")
+        mail = email_entry.get()
+
+    naam = naam_entry.get()
+
+    while True:
+        try:
+            telefoonnummer = telefoonnummer_entry.get()
+            break
+        except:
+            print("Telefoonnummer klopt niet..")
+
+    wachtwoord = wachtwoord_entry.get()
+
+    while len(wachtwoord) <= 6:
+        wachtwoord = wachtwoord_entry.get()
+
+    fietsnummer = int(random.randint(1000, 9999))
+
+    fietsnummer_lijst = []
+    for gegeven in gegevens:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+
+    while str(fietsnummer) in fietsnummer_lijst:
+        fietsnummer = int(random.randint(1000, 9999))
+
+    nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
+
+    bestand = open('database/gebruikers.csv', 'a')
+    bestand.write(nieuwe_gegevens + '\n')
+    bestand.close()
+
+def algemene_informatie_aanvragen():
+    gegevens = csvread("gestald.csv")
+
+    vrije_plekken = 1000 - (len(gegevens) + 1)
+
+    return vrije_plekken
+    #print("Er zijn nog " + str(vrije_plekken) + " van de 1000 plekken over.")
+    #print("De kosten voor het bergen van uw fiets zijn \u20ac2.5 per dag.")
+    #print("De eerste dag is gratis.")
 
 def toonHoofdFrame():
     registermenuFrame.pack_forget()
@@ -102,8 +165,9 @@ email_label.grid(row=3, column=0)
 email_entry = tkinter.Entry(registermenuFrame)
 email_entry.grid(row=3, column=1)
 
-knopregistreer = tkinter.Button(master=registermenuFrame, text="Registreer")
+knopregistreer = tkinter.Button(master=registermenuFrame, text="Registreer", command=registreren)
 knopregistreer.grid(row=4, column=1, pady=5)
+print(naam_entry, wachtwoord_entry, telefoonnummer_entry, email_entry)
 
 knopterugRegistreren = tkinter.Button(master=registermenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugRegistreren.grid(row=4, column=0, pady=5)
@@ -179,8 +243,7 @@ algemeneInformatiemenuFrame = tkinter.Frame(root)
 algemeneInformatiemenuFrame.configure(background="yellow")
 algemeneInformatiemenuFrame.pack()
 
-aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog "+str(Fietsenstalling.algemene_informatie_aanvragen())+
-                                                                             " van de 1000 plekken over.", background="yellow")
+aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog "+str(algemene_informatie_aanvragen())+" van de 1000 plekken over.", background="yellow")
 aantalplekken_label.pack()
 
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
