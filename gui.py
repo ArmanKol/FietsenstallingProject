@@ -38,9 +38,8 @@ def registreren():
 
     wachtwoord = wachtwoord_entry.get()
 
-    while len(wachtwoord) <= 6:
+    if len(wachtwoord) <= 6:
         tkinter.messagebox.showinfo("","Je hebt een te korte wachtwoord ingevoerd.")
-        break
 
     fietsnummer = int(random.randint(1000, 9999))
 
