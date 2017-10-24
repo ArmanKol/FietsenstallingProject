@@ -1,5 +1,6 @@
 import csv
 import random
+import datetime
 
 
 def csvread(bestandsnaam):
@@ -38,6 +39,11 @@ def registreren():
             print("Telefoonnummer klopt niet..")
 
     wachtwoord = input("Wachtwoord: ")
+
+    while len(wachtwoord) <= 6:
+        print("Wachtwoord moet ten minste 6 tekens lang zijn.. ")
+        wachtwoord = input("Wachtwoord: ")
+
     fietsnummer = int(random.randint(1000, 9999))
 
     fietsnummer_lijst = []
@@ -92,38 +98,56 @@ def algemene_informatie_aanvragen():
 
 
 def inloggen():
-    correctLogin = 0
-    pogingen = 5
-    gegevens = csvread("gebruikers.csv")
+    gegevens_gebruiker = csvread("gebruikers.csv")
+    mail = str(input("Geef je e-mailadres: "))
+    wachtwoord = str(input("Geef je wachtwoord: "))
+    counter = 0
 
-    while correctLogin != 1:
-        if pogingen == 0:
-            break
-        global mail
-        mail = str(input("Geef je e-mailadres: "))
-        wachtwoord = str(input("Geef je wachtwoord: "))
-        lengte_lijst = 0
+    while counter < 3:
+        for item in gegevens_gebruiker:
+            if str(item['wachtwoord']) == wachtwoord and str(item['mail']) == mail:
+                return (str(item['fietsnummer']))
+        else:
+            print("Combinatie is niet correct..")
+            mail = str(input("Geef je e-mailadres: "))
+            wachtwoord = str(input("Geef je wachtwoord: "))
+            counter += 1
+
+    print("Inlogpogingen overschreden..")
+    return 0
+
+
+def stallen():
+    vandaag = datetime.datetime.today()
+    datum = vandaag.strftime('/%d/%m/%Y')
+    tijd = vandaag.strftime('%H/%M')
+    gegevens = csvread('gestald.csv')
+    response_inloggen = inloggen_twee()
+
+    if response_inloggen != 0:
+
+        fietsnummer = input("Fietsnummer: ")
+
+        pogingen_fietsnummer = 0
+        while str(fietsnummer) != response_inloggen and pogingen_fietsnummer < 5:
+            print(str(fietsnummer) + " is niet geregistreerd.. Probeer opnieuw..")
+            fietsnummer = input("Fietsnummer: ")
+            pogingen_fietsnummer += 1
+
+        fietsnummer_lijst = []
         for gegeven in gegevens:
-            if mail == gegeven["mail"]:
-                if wachtwoord == "":
-                    print("Er is geen wachtwoord ingevoerd.")
-                    break
-                if wachtwoord == gegeven["wachtwoord"]:
-                    print("Combinatie klopt.")
-                    correctLogin = 1
-                    break
-                else:
-                    print("De combinatie is niet goed.")
-                    pogingen -= 1
-                    if pogingen != 0:
-                        print("U heeft nog " + str(pogingen) + " pogingen over.")
-            else:
-                if lengte_lijst == len(gegevens):
-                    print("Het e-mailadres is niet gevonden.")
-                lengte_lijst += 1
-                pass
+            fietsnummer_lijst.append(gegeven['fietsnummer'])
 
-    if pogingen == 0:
-        print("Uw heeft te vaak geprobeert in te loggen.")
+        if fietsnummer in fietsnummer_lijst:
+            print("Fiets staat al in stalling..")
 
-registreren()
+        else:
+            print("Fiets kan gestald worden..")
+            gegevens_stalling = str(fietsnummer) + ";" + tijd + datum
+
+            bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
+            bestand.write(gegevens_stalling + '\n')
+            bestand.close()
+
+    else:
+        print("Fiets kan niet gestald worden..")
