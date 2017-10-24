@@ -21,13 +21,13 @@ def toonStallenFrame():
 
 def toonOphalenFrame():
     hoofdmenuFrame.pack_forget()
-    ophalenmenuFrame.pack()
+    ophalenmenuFrame.pack(padx=10, pady=10)
 
 def toonInformatieFrame():
     hoofdmenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack_forget()
     persoonlijkeInformatieFrame.pack_forget()
-    informatiemenuFrame.pack()
+    informatiemenuFrame.pack(padx=50, pady=10)
 
 def toonAlgemeneInformatieFrame():
     informatiemenuFrame.pack_forget()
@@ -124,8 +124,8 @@ inlogWachtwoordStallen_label.grid(row=1, column=0)
 inlogWachtwoordStallen_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
 inlogWachtwoordStallen_entry.grid(row=1, column=1)
 
-inlogKnopStallen_button = tkinter.Button(master=stallenmenuFrame, text="Log in")
-inlogKnopStallen_button.grid(row=2, column=1, pady=5)
+inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in")
+inlogKnopStallen.grid(row=2, column=1, pady=5)
 
 knopterugStallen = tkinter.Button(master=stallenmenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugStallen.grid(row=2, column=0, pady=5)
@@ -135,31 +135,50 @@ ophalenmenuFrame = tkinter.Frame(root)
 ophalenmenuFrame.configure(background="yellow")
 ophalenmenuFrame.pack()
 
+inlogNaamOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je naam/e-mailadres in: ", background="yellow")
+inlogNaamOphalen_label.grid(row=0, column=0, pady=5)
 
+inlogNaamOphalen_entry = tkinter.Entry(master=ophalenmenuFrame)
+inlogNaamOphalen_entry.grid(row=0, column=1)
+
+inlogWachtwoordOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
+inlogWachtwoordOphalen_label.grid(row=1, column=0)
+
+inlogWachtwoordOphalen_entry = tkinter.Entry(master=ophalenmenuFrame, show="*")
+inlogWachtwoordOphalen_entry.grid(row=1, column=1)
+
+inlogFietsnummerOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je fietsnummer in: ", background="yellow")
+inlogFietsnummerOphalen_label.grid(row=2, column=0, pady=5)
+
+inlogFietsnummerOphalen_entry = tkinter.Entry(master=ophalenmenuFrame)
+inlogFietsnummerOphalen_entry.grid(row=2, column=1)
 
 knopterugOphalen = tkinter.Button(master=ophalenmenuFrame, text="Terug", command=toonHoofdFrame)
-knopterugOphalen.pack()
+knopterugOphalen.grid(row=3, column=0, pady=5)
+
+inlogKnopOphalen = tkinter.Button(master=ophalenmenuFrame, text="Log in")
+inlogKnopOphalen.grid(row=3, column=1)
 
 #Informatie opvragen
 informatiemenuFrame = tkinter.Frame(root)
 informatiemenuFrame.configure(background="yellow")
 informatiemenuFrame.pack()
 
-algemeneInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Algemene informatie", command=toonAlgemeneInformatieFrame)
-algemeneInformatieKnop.grid(row=0, column=0)
+algemeneInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Algemene informatie", width=25, command=toonAlgemeneInformatieFrame)
+algemeneInformatieKnop.grid(row=0, column=0, pady=5)
 
-persoonlijkeInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Persoonlijke informatie", command=toonPersoonlijkeInformatieFrame)
-persoonlijkeInformatieKnop.grid(row=0, column=1)
+persoonlijkeInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Persoonlijke informatie", width=25, command=toonPersoonlijkeInformatieFrame)
+persoonlijkeInformatieKnop.grid(row=1, column=0, pady=5)
 
-knopterugInformatieOpvragen = tkinter.Button(master=informatiemenuFrame, text="Terug", command=toonHoofdFrame)
-knopterugInformatieOpvragen.grid(row=1, column=1)
+knopterugInformatieOpvragen = tkinter.Button(master=informatiemenuFrame, text="Terug", width=25, command=toonHoofdFrame)
+knopterugInformatieOpvragen.grid(row=2, column=0, pady=5)
 
 #informatie opvragen/algemene informatie
 algemeneInformatiemenuFrame = tkinter.Frame(root)
 algemeneInformatiemenuFrame.configure(background="yellow")
 algemeneInformatiemenuFrame.pack()
 
-aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog x plekken vrij", background="yellow")
+aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog"+"van de"+"plekken over", background="yellow")
 aantalplekken_label.pack()
 
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
@@ -186,7 +205,7 @@ inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInformatieFrame,
 inlogKnopPersoonlijk_button.grid(row=2, column=1)
 
 knopterugPersoonlijkeInformatie = tkinter.Button(master= persoonlijkeInformatieFrame, text="Terug", command=toonInformatieFrame)
-knopterugPersoonlijkeInformatie.grid(row=2, column=0)
+knopterugPersoonlijkeInformatie.grid(row=2, column=0, pady=5)
 
 
 toonHoofdFrame()
