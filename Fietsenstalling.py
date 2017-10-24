@@ -83,12 +83,12 @@ def persoonlijke_informatie_opvragen():
 
         for fietsdata in stalling_gegevens:
             if gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
-                data = fietsdata["staldata"]
+                datum = fietsdata["staldata"]
 
-    data = data.split("/")
+    datum = datum.split("/")
     vandaag = datetime.datetime.today()
     datum_vandaag = datetime.date(int(vandaag.strftime("%Y")), int(vandaag.strftime("%m")), int(vandaag.strftime("%d")))
-    datum_gestald = datetime.date(int(data[2]), int(data[1]), int(data[0]))
+    datum_gestald = datetime.date(int(datum[2]), int(datum[1]), int(datum[0]))
     aantal_dagen_gestald = datum_vandaag - datum_gestald
     aantal_dagen_gestald = (str(aantal_dagen_gestald)).split(" ")
     prijs = str(int(aantal_dagen_gestald[0]) * 2.5)
@@ -198,3 +198,16 @@ def ophalen_fiets():
     else:
         print("Fiets kan niet opgehaald worden..")
 
+keuze = input("keuze?\n1=Registreren\n2=ophalen\n3=stallen\n4=prive info\n5=algemen info")
+if keuze == 1:
+    registreren()
+elif keuze == 2:
+    ophalen_fiets()
+elif keuze == 3:
+    stallen_fiets()
+elif keuze == 4:
+    algemene_informatie_aanvragen()
+elif keuze ==5:
+    persoonlijke_informatie_opvragen()
+else:
+    print("is er niet domme kut.")
