@@ -8,16 +8,16 @@ def toonHoofdFrame():
     stallenmenuFrame.pack_forget()
     ophalenmenuFrame.pack_forget()
     persoonlijkeInformatieFrame.pack_forget()
-    hoofdmenuFrame.pack()
+    hoofdmenuFrame.pack(padx=50, pady=10)
 
 def toonRegisterFrame():
     hoofdmenuFrame.pack_forget()
-    registermenuFrame.pack()
+    registermenuFrame.pack(padx=10, pady=10)
 
 def toonStallenFrame():
     hoofdmenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
-    stallenmenuFrame.pack()
+    stallenmenuFrame.pack(padx=10, pady=10)
 
 def toonOphalenFrame():
     hoofdmenuFrame.pack_forget()
@@ -41,32 +41,36 @@ def toonPersoonlijkeInformatieFrame():
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
 root.resizable(False, False)
-#root.geometry("280x170")
 root.configure(background="yellow")
+
+nslogo = tkinter.PhotoImage("C:\\Users\\Arman.K\\PycharmProjects\\FietsenstallingProject\\nslogo.png")
 
 #Hoofdmenu
 hoofdmenuFrame = tkinter.Frame(root)
 hoofdmenuFrame.configure(background="yellow")
 hoofdmenuFrame.pack()
 
+#backgroundFrame = tkinter.Label(master=hoofdmenuFrame, image=nslogo)
+#backgroundFrame.grid(row=0)
+
 titel_label = tkinter.Label(master=hoofdmenuFrame, text="NS-Fietsstalling", background="yellow", font=20)
-titel_label.grid(row=0, column=0)
+titel_label.grid(row=0, column=0, pady=5)
 
 registrerenknop = tkinter.Button(master=hoofdmenuFrame, text="Fiets registreren", width=25, command=toonRegisterFrame)
-registrerenknop.grid(row=1, column=0)
+registrerenknop.grid(row=1, column=0, pady=5)
 
 stallenKnop = tkinter.Button(master=hoofdmenuFrame, text="Fiets stallen", width=25, command=toonStallenFrame)
-stallenKnop.grid(row=2, column=0)
+stallenKnop.grid(row=2, column=0, pady=5)
 
 ophalenKnop = tkinter.Button(master=hoofdmenuFrame, text="Fiets ophalen", width=25, command=toonOphalenFrame)
-ophalenKnop.grid(row=3, column=0)
+ophalenKnop.grid(row=3, column=0, pady=5)
 
 
 informatieOpvragenKnop = tkinter.Button(master=hoofdmenuFrame, text="Informatie opvragen", width=25, command=toonInformatieFrame)
-informatieOpvragenKnop.grid(row=4, column=0)
+informatieOpvragenKnop.grid(row=4, column=0, pady=5)
 
 knopAfsluiten = tkinter.Button(master=hoofdmenuFrame, text="Afsluiten", width=25, command=sys.exit  )
-knopAfsluiten.grid(row=5, column=0)
+knopAfsluiten.grid(row=5, column=0, pady=5)
 
 #Registreren
 registermenuFrame = tkinter.Frame(root)
@@ -74,7 +78,7 @@ registermenuFrame.configure(background="yellow")
 registermenuFrame.pack()
 
 naam_label = tkinter.Label(master=registermenuFrame, text="Voer hier je naam in: ", background="yellow")
-naam_label.grid(row=0, column=0)
+naam_label.grid(row=0, column=0, pady=5)
 
 naam_entry = tkinter.Entry(registermenuFrame)
 naam_entry.grid(row=0, column=1)
@@ -86,7 +90,7 @@ wachtwoord_entry = tkinter.Entry(registermenuFrame)
 wachtwoord_entry.grid(row=1, column=1)
 
 telefoonnummer_label = tkinter.Label(master=registermenuFrame, text="Voer hier je telefoonnummer in: ", background="yellow")
-telefoonnummer_label.grid(row=2, column=0)
+telefoonnummer_label.grid(row=2, column=0, pady=5)
 
 telefoonnummer_entry = tkinter.Entry(registermenuFrame)
 telefoonnummer_entry.grid(row=2, column=1)
@@ -98,10 +102,10 @@ email_entry = tkinter.Entry(registermenuFrame)
 email_entry.grid(row=3, column=1)
 
 knopregistreer = tkinter.Button(master=registermenuFrame, text="Registreer")
-knopregistreer.grid(row=4, column=1)
+knopregistreer.grid(row=4, column=1, pady=5)
 
 knopterugRegistreren = tkinter.Button(master=registermenuFrame, text="Terug", command=toonHoofdFrame)
-knopterugRegistreren.grid(row=4, column=0)
+knopterugRegistreren.grid(row=4, column=0, pady=5)
 
 #Stallen
 stallenmenuFrame = tkinter.Frame(root)
@@ -112,7 +116,7 @@ inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier 
 inlogNaamStallen_label.grid(row=0, column=0, pady=5)
 
 inlogNaamStallen_entry = tkinter.Entry(master=stallenmenuFrame)
-inlogNaamStallen_entry.grid(row=0, column=1, padx=10)
+inlogNaamStallen_entry.grid(row=0, column=1)
 
 inlogWachtwoordStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordStallen_label.grid(row=1, column=0)
@@ -121,10 +125,10 @@ inlogWachtwoordStallen_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
 inlogWachtwoordStallen_entry.grid(row=1, column=1)
 
 inlogKnopStallen_button = tkinter.Button(master=stallenmenuFrame, text="Log in")
-inlogKnopStallen_button.grid(row=2, column=1)
+inlogKnopStallen_button.grid(row=2, column=1, pady=5)
 
 knopterugStallen = tkinter.Button(master=stallenmenuFrame, text="Terug", command=toonHoofdFrame)
-knopterugStallen.grid(row=2, column=0)
+knopterugStallen.grid(row=2, column=0, pady=5)
 
 #Ophalen
 ophalenmenuFrame = tkinter.Frame(root)
@@ -183,7 +187,6 @@ inlogKnopPersoonlijk_button.grid(row=2, column=1)
 
 knopterugPersoonlijkeInformatie = tkinter.Button(master= persoonlijkeInformatieFrame, text="Terug", command=toonInformatieFrame)
 knopterugPersoonlijkeInformatie.grid(row=2, column=0)
-
 
 
 toonHoofdFrame()
