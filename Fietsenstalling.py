@@ -98,6 +98,7 @@ def algemene_informatie_aanvragen():
 
 
 def inloggen():
+    global mail             # voor in de functies informatie opvragen
     gegevens_gebruiker = csvread("gebruikers.csv")
     mail = str(input("Geef je e-mailadres: "))
     wachtwoord = str(input("Geef je wachtwoord: "))
@@ -122,7 +123,7 @@ def stallen():
     datum = vandaag.strftime('/%d/%m/%Y')
     tijd = vandaag.strftime('%H/%M')
     gegevens = csvread('gestald.csv')
-    response_inloggen = inloggen_twee()
+    response_inloggen = inloggen()
 
     if response_inloggen != 0:
 
