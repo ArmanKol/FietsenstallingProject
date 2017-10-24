@@ -1,5 +1,6 @@
 import tkinter
 import sys
+import Fietsenstalling
 
 def toonHoofdFrame():
     registermenuFrame.pack_forget()
@@ -43,7 +44,7 @@ root.title("NS-Fietsenstalling")
 root.resizable(False, False)
 root.configure(background="yellow")
 
-nslogo = tkinter.PhotoImage("C:\\Users\\Arman.K\\PycharmProjects\\FietsenstallingProject\\nslogo.png")
+#nslogo = tkinter.PhotoImage("C:\\Users\\Arman.K\\PycharmProjects\\FietsenstallingProject\\nslogo.png")
 
 #Hoofdmenu
 hoofdmenuFrame = tkinter.Frame(root)
@@ -178,7 +179,8 @@ algemeneInformatiemenuFrame = tkinter.Frame(root)
 algemeneInformatiemenuFrame.configure(background="yellow")
 algemeneInformatiemenuFrame.pack()
 
-aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog"+"van de"+"plekken over", background="yellow")
+aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog "+str(Fietsenstalling.algemene_informatie_aanvragen())+
+                                                                             " van de 1000 plekken over.", background="yellow")
 aantalplekken_label.pack()
 
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
