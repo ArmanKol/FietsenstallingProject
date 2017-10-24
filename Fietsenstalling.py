@@ -59,40 +59,37 @@ def registreren():
     bestand.write(nieuwe_gegevens + '\n')
     bestand.close()
 
+    print("Gebruiker is geregistreerd en heeft fietsnummer: " + str(fietsnummer))
+
 
 def persoonlijke_informatie_opvragen():
+
     print("U moet eerst inloggen om deze gegevens te mogen bekijken.")
-    correctLogin = 0
+    response_inloggen = inloggen()
 
-    while correctLogin == 0:
-        correctLogin = inloggen()
+    if response_inloggen != 0:
 
-    gegevens = csvread("gebruikers.csv")
-    stalling_gegevens = csvread("gestald.csv")
+        gebruiker_gegevens = csvread("gebruikers.csv")
+        stalling_gegevens = csvread("gestald.csv")
 
-    for gegeven in gegevens:
-        if mail == gegeven["mail"]:
-            if gegeven["tussenvoegsel"] == "":
-                print("Uw volledige naam: " + gegeven["voornaam"] + " " + gegeven["achternaam"])
-            else:
-                print("Uw volledige naam: " + gegeven["voornaam"] + " " + gegeven["tussenvoegsel"] + " " + gegeven[
-                    "achternaam"])
-            print("Uw unieke fietsnummer is: " + gegeven["fietsnummer"])
-            print("Uw e-mail adres is: " + gegeven["mail"])
-            print("Uw telefoonnummer is: " + gegeven["telefoonnummer"])
+        for gebruiker_gegeven in gebruiker_gegevens:
+            if mail == gebruiker_gegeven["mail"]:
+                if gebruiker_gegeven["tussenvoegsel"] == "":
+                    print("Uw volledige naam: " + gebruiker_gegeven["voornaam"] + " " + gebruiker_gegeven["achternaam"])
+                else:
+                    print("Uw volledige naam: " + gebruiker_gegeven["voornaam"] + " " + gebruiker_gegeven["tussenvoegsel"] + " " + gebruiker_gegeven["achternaam"])
+                print("Uw unieke fietsnummer is: " + gebruiker_gegeven["fietsnummer"])
+                print("Uw e-mail adres is: " + gebruiker_gegeven["mail"])
+                print("Uw telefoonnummer is: " + gebruiker_gegeven["telefoonnummer"])
 
-        for fietsdata in stalling_gegevens:
-            if gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
-                datum = fietsdata["staldata"]
+            for fietsdata in stalling_gegevens:
+                if gebruiker_gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
+                    datum = fietsdata["staldatum"]
 
-    datum = datum.split("/")
-    vandaag = datetime.datetime.today()
-    datum_vandaag = datetime.date(int(vandaag.strftime("%Y")), int(vandaag.strftime("%m")), int(vandaag.strftime("%d")))
-    datum_gestald = datetime.date(int(datum[2]), int(datum[1]), int(datum[0]))
-    aantal_dagen_gestald = datum_vandaag - datum_gestald
-    aantal_dagen_gestald = (str(aantal_dagen_gestald)).split(" ")
-    prijs = str(int(aantal_dagen_gestald[0]) * 2.5)
-    print("Er moet \u20ac" + prijs + " worden betaald.")
+        prijs_te_betalen()
+
+    else:
+        print("Informatie kan niet worden aangevraagd.")
 
 
 def algemene_informatie_aanvragen():
@@ -101,7 +98,36 @@ def algemene_informatie_aanvragen():
     vrije_plekken = 1000 - (len(gegevens) + 1)
 
     print("Er zijn nog " + str(vrije_plekken) + " van de 1000 plekken over.")
-    print("De kosten voor het bergen van uw fiets zijn 0. euro per uur.")
+    print("De kosten voor het bergen van uw fiets zijn \u20ac2.5 per dag.")
+    print("De eerste dag is gratis.")
+
+
+def prijs_te_betalen():
+
+    gebruiker_gegevens = csvread("gebruikers.csv")
+    stalling_gegevens = csvread("gestald.csv")
+
+    for gebruiker_gegeven in gebruiker_gegevens:
+        if mail == gebruiker_gegeven["mail"]:
+            for fietsdata in stalling_gegevens:
+                if gebruiker_gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
+                    datum = fietsdata["staldatum"]
+
+    datum = datum.split("/")
+    vandaag = datetime.datetime.today()
+    datum_vandaag = datetime.date(int(vandaag.strftime("%Y")), int(vandaag.strftime("%m")), int(vandaag.strftime("%d")))
+    datum_gestald = datetime.date(int(datum[2]), int(datum[1]), int(datum[0]))
+    aantal_dagen_gestald = datum_vandaag - datum_gestald
+    aantal_dagen_gestald = (str(aantal_dagen_gestald)).split(" ")
+
+    if str(aantal_dagen_gestald[0]) == "0:00:00":
+        aantal_dagen_gestald = [0]
+
+    if int(aantal_dagen_gestald[0]) <= 1:
+        print("Er hoeft niks betaald te worden, de eerste dag is gratis.")
+    else:
+        prijs = str(int(aantal_dagen_gestald[0])-1 * 2.5)
+        print("Er moet \u20ac" + prijs + " worden betaald.")
 
 
 def inloggen():
@@ -185,7 +211,8 @@ def ophalen_fiets():
             for fiets in gegevens_stalling:
                 if fiets['fietsnummer'] == response_inloggen:
                     gegevens_stalling.remove(fiets)
-                    print("Fiets kan opgehaald worden.. ")
+                    print("Fiets opgehaald.")
+                    prijs_te_betalen()
 
             with open("database/gestald.csv", "w", newline='\n') as WriteMyCsv:
                 veldnamen = ["fietsnummer", "staldatum"]
@@ -198,16 +225,5 @@ def ophalen_fiets():
     else:
         print("Fiets kan niet opgehaald worden..")
 
-keuze = input("keuze?\n1=Registreren\n2=ophalen\n3=stallen\n4=prive info\n5=algemen info")
-if keuze == 1:
-    registreren()
-elif keuze == 2:
-    ophalen_fiets()
-elif keuze == 3:
-    stallen_fiets()
-elif keuze == 4:
-    algemene_informatie_aanvragen()
-elif keuze ==5:
-    persoonlijke_informatie_opvragen()
-else:
-    print("is er niet domme kut.")
+
+persoonlijke_informatie_opvragen()
