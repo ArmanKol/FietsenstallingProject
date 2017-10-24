@@ -2,6 +2,7 @@ import tkinter
 import sys
 import csv
 import random
+import tkinter.messagebox
 
 def csvread(bestandsnaam):
     with open("database/" + bestandsnaam, "r") as ReadMyCsv:
@@ -38,7 +39,8 @@ def registreren():
     wachtwoord = wachtwoord_entry.get()
 
     while len(wachtwoord) <= 6:
-        wachtwoord = wachtwoord_entry.get()
+        tkinter.messagebox.showinfo("","Je hebt een te korte wachtwoord ingevoerd.")
+        break
 
     fietsnummer = int(random.randint(1000, 9999))
 
