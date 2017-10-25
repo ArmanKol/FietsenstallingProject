@@ -16,49 +16,48 @@ def csvread(bestandsnaam):
 
 def registreren():
     """Functie voor het registreren van de gebruiker. Slaat de gegevens op in gebruikers.csv"""
-    gegevens = csvread("gebruikers.csv")
-
-    mail = email_entry.get()
+    gegevens_gebruikers = csvread("gebruikers.csv")
+    gegevens_status = 0
     mail_lijst = []
-    for gegeven in gegevens:
+    wachtwoord = wachtwoord_entry.get()
+    naam = naam_entry.get()
+    mail = email_entry.get()
+    telefoonnummer = telefoonnummer_entry.get()
+
+    for gegeven in gegevens_gebruikers:
         mail_lijst.append(gegeven['mail'])
 
-    while mail in mail_lijst:
-        print("Dit e-mail adress is al geregistreerd")
-        mail = email_entry.get()
+    if mail in mail_lijst:
+        tkinter.messagebox.showinfo("", "Dit e-mail adress is al geregistreerd.")
+    else:
+        gegevens_status += 1
+        pass
 
-    naam = naam_entry.get()
-
-    while True:
-        try:
-            telefoonnummer = telefoonnummer_entry.get()
-            break
-        except:
-            print("Telefoonnummer klopt niet..")
-
-    wachtwoord = wachtwoord_entry.get()
-
-    while len(wachtwoord) <= 6:
-        teKorteWachtwoordPopup = tkinter.messagebox.askquestion("","U heeft een te korte wachtwoord ingevoerd. Wilt u het opnieuw proberen?")
-        if teKorteWachtwoordPopup == "yes":
-            return toonRegisterFrame()
-        elif teKorteWachtwoordPopup == "no":
-            return toonHoofdFrame()
+    if len(wachtwoord) <= 6:
+        tkinter.messagebox.showinfo("", "Je hebt een te korte wachtwoord ingevoerd.")
+    else:
+        gegevens_status += 1
+        pass
 
     fietsnummer = int(random.randint(1000, 9999))
 
     fietsnummer_lijst = []
-    for gegeven in gegevens:
+    for gegeven in gegevens_gebruikers:
         fietsnummer_lijst.append(gegeven['fietsnummer'])
 
     while str(fietsnummer) in fietsnummer_lijst:
         fietsnummer = int(random.randint(1000, 9999))
 
-    nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
+    if gegevens_status == 2:
+        nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
 
-    bestand = open('database/gebruikers.csv', 'a')
-    bestand.write(nieuwe_gegevens + '\n')
-    bestand.close()
+        bestand = open('database/gebruikers.csv', 'a')
+        bestand.write(nieuwe_gegevens + '\n')
+        bestand.close()
+    else:
+        pass
+
+    return fietsnummer
 
 def algemene_informatie_aanvragen():
     gegevens = csvread("gestald.csv")
