@@ -39,3 +39,9 @@ treinTijden_label.grid(row=0, column=0)
 treinTijden_entry = tkinter.Entry(master=treinTijdenFrame)
 treinTijden_entry.grid(row=0, column=1)
 
+knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder")
+knopverderTreinTijden.grid(row=1, column=1, pady=5)
+
+knopterugTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Terug", command=toonInformatieFrame)
+knopterugTreinTijden.grid(row=1, column=0)
+
