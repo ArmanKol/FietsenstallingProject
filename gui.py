@@ -196,9 +196,6 @@ def algemene_informatie_aanvragen():
     vrije_plekken = 1000 - (len(gegevens) + 1)
 
     return vrije_plekken
-    #print("Er zijn nog " + str(vrije_plekken) + " van de 1000 plekken over.")
-    #print("De kosten voor het bergen van uw fiets zijn \u20ac2.5 per dag.")
-    #print("De eerste dag is gratis.")
 
 
 def toonHoofdFrame():
@@ -393,6 +390,12 @@ algemeneInformatiemenuFrame.pack()
 
 aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog "+str(algemene_informatie_aanvragen())+" van de 1000 plekken over.", background="yellow")
 aantalplekken_label.pack()
+
+kostenperdag_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="De kosten voor het bergen van uw fiets zijn \u20ac2.50 per dag.", background="yellow")
+kostenperdag_label.pack()
+
+eerstedaggratis_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="De eerste dag is gratis.", background="yellow")
+eerstedaggratis_label.pack()
 
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
 knopterugAlgemenInformatie.pack()
