@@ -3,6 +3,7 @@ import sys
 import csv
 import random
 import tkinter.messagebox
+import datetime
 
 def csvread(bestandsnaam):
     with open("database/" + bestandsnaam, "r") as ReadMyCsv:
@@ -14,11 +15,14 @@ def csvread(bestandsnaam):
 
     return gegevens
 
+
 def registreren():
     """Functie voor het registreren van de gebruiker. Slaat de gegevens op in gebruikers.csv"""
     gegevens_gebruikers = csvread("gebruikers.csv")
     gegevens_status = 0
+
     mail_lijst = []
+
     wachtwoord = wachtwoord_entry.get()
     naam = naam_entry.get()
     mail = email_entry.get()
@@ -50,7 +54,7 @@ def registreren():
 
     if gegevens_status == 2:
         nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
-        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd.\n"+" Fietsnummer: "+str(fietsnummer))
+        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd.\n"+"Fietsnummer: "+str(fietsnummer))
         bestand = open('database/gebruikers.csv', 'a')
         bestand.write(nieuwe_gegevens + '\n')
         bestand.close()
@@ -60,25 +64,91 @@ def registreren():
         pass
 
 
-def inloggegui():
+def inlog_stallen():
     gegevens_gebruiker = csvread("gebruikers.csv")
-    username = username_entry.get()
-    password = password_entry.get()
+    gegevens_gestald = csvread("gestald.csv")
+
+    vandaag = datetime.datetime.today()
+    datum = vandaag.strftime('%d/%m/%Y')
+
+    username = inlogNaamStallen_entry.get()
+    password = inlogWachtwoordStallen_entry.get()
+    fietsnummer = inlogFietsnummerStallen_entry.get()
+
     status_inloggen = 0
+    fietsnummer_lijst = []
+
+    for gegeven in gegevens_gestald:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+
+    if fietsnummer in fietsnummer_lijst:
+        tkinter.messagebox.showinfo("", "Fiets staat al in stalling..")
+    else:
+        pass
 
     for item in gegevens_gebruiker:
         if str(item['wachtwoord']) == password and str(item['mail']) == username:
             status_inloggen += 1
-            return (str(item['fietsnummer']))
         else:
             pass
 
     if status_inloggen == 0:
         tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
     else:
+        gegevens_stalling = str(fietsnummer) + ";" + datum
+        registrerengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets stallen")
+        bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
+        bestand.write(gegevens_stalling + '\n')
+        bestand.close()
+        if registrerengelukt == "ok":
+            return toonHoofdFrame()
+
+
+def inlog_ophalen():
+    gegevens_gebruiker = csvread("gebruikers.csv")
+    gegevens_gestald = csvread("gestald.csv")
+
+    username = inlogNaamOphalen_entry.get()
+    password = inlogWachtwoordOphalen_entry.get()
+    fietsnummer = inlogFietsnummerOphalen_entry.get()
+
+    status_inloggen = 0
+    fietsnummer_lijst = []
+
+    for gegeven in gegevens_gestald:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+
+    if fietsnummer not in fietsnummer_lijst:
+        tkinter.messagebox.showinfo("", "Fiets staat niet in stalling..")
+    else:
         pass
 
-    print(status_inloggen)
+    for item in gegevens_gebruiker:
+        if str(item['wachtwoord']) == password and str(item['mail']) == username:
+            status_inloggen += 1
+        else:
+            pass
+
+    if status_inloggen == 0:
+        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
+    else:
+        registrerengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets ophalen")
+
+        for fiets in gegevens_gestald:
+            if fiets['fietsnummer'] == fietsnummer:
+                gegevens_gestald.remove(fiets)
+                print("Fiets kan opgehaald worden.. ")
+
+        with open("database/gestald.csv", "w", newline='\n') as WriteMyCsv:
+            veldnamen = ["fietsnummer", "staldatum"]
+            writer = csv.DictWriter(WriteMyCsv, fieldnames=veldnamen, delimiter=";")
+            writer.writeheader()
+
+            for gegeven in gegevens_gestald:
+                writer.writerow((gegeven))
+
+        if registrerengelukt == "ok":
+            return toonHoofdFrame()
 
 
 def algemene_informatie_aanvragen():
@@ -205,20 +275,26 @@ stallenmenuFrame.pack()
 inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamStallen_label.grid(row=0, column=0, pady=5)
 
-username_entry = tkinter.Entry(master=stallenmenuFrame)
-username_entry.grid(row=0, column=1)
+inlogNaamStallen_entry = tkinter.Entry(master=stallenmenuFrame)
+inlogNaamStallen_entry.grid(row=0, column=1)
 
 inlogWachtwoordStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordStallen_label.grid(row=1, column=0)
 
-password_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
-password_entry.grid(row=1, column=1)
+inlogWachtwoordStallen_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
+inlogWachtwoordStallen_entry.grid(row=1, column=1)
 
-inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in", command=inloggegui)
-inlogKnopStallen.grid(row=2, column=1, pady=5)
+inlogFietsnummerStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je fietsnummer in: ", background="yellow")
+inlogFietsnummerStallen_label.grid(row=2, column=0, pady=5)
+
+inlogFietsnummerStallen_entry = tkinter.Entry(master=stallenmenuFrame)
+inlogFietsnummerStallen_entry.grid(row=2, column=1)
+
+inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in", command=inlog_stallen)
+inlogKnopStallen.grid(row=3, column=1, pady=5)
 
 knopterugStallen = tkinter.Button(master=stallenmenuFrame, text="Terug", command=toonHoofdFrame)
-knopterugStallen.grid(row=2, column=0, pady=5)
+knopterugStallen.grid(row=3, column=0, pady=5)
 
 #Ophalen
 ophalenmenuFrame = tkinter.Frame(root)
@@ -246,7 +322,7 @@ inlogFietsnummerOphalen_entry.grid(row=2, column=1)
 knopterugOphalen = tkinter.Button(master=ophalenmenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugOphalen.grid(row=3, column=0, pady=5)
 
-inlogKnopOphalen = tkinter.Button(master=ophalenmenuFrame, text="Log in")
+inlogKnopOphalen = tkinter.Button(master=ophalenmenuFrame, text="Log in", command=inlog_ophalen)
 inlogKnopOphalen.grid(row=3, column=1)
 
 #Informatie opvragen
