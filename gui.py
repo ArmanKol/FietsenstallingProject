@@ -59,6 +59,28 @@ def registreren():
     else:
         pass
 
+
+def inloggegui():
+    gegevens_gebruiker = csvread("gebruikers.csv")
+    username = username_entry.get()
+    password = password_entry.get()
+    status_inloggen = 0
+
+    for item in gegevens_gebruiker:
+        if str(item['wachtwoord']) == password and str(item['mail']) == username:
+            status_inloggen += 1
+            return (str(item['fietsnummer']))
+        else:
+            pass
+
+    if status_inloggen == 0:
+        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
+    else:
+        pass
+
+    print(status_inloggen)
+
+
 def algemene_informatie_aanvragen():
     gegevens = csvread("gestald.csv")
 
@@ -183,16 +205,16 @@ stallenmenuFrame.pack()
 inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamStallen_label.grid(row=0, column=0, pady=5)
 
-inlogNaamStallen_entry = tkinter.Entry(master=stallenmenuFrame)
-inlogNaamStallen_entry.grid(row=0, column=1)
+username_entry = tkinter.Entry(master=stallenmenuFrame)
+username_entry.grid(row=0, column=1)
 
 inlogWachtwoordStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordStallen_label.grid(row=1, column=0)
 
-inlogWachtwoordStallen_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
-inlogWachtwoordStallen_entry.grid(row=1, column=1)
+password_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
+password_entry.grid(row=1, column=1)
 
-inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in")
+inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in", command=inloggegui)
 inlogKnopStallen.grid(row=2, column=1, pady=5)
 
 knopterugStallen = tkinter.Button(master=stallenmenuFrame, text="Terug", command=toonHoofdFrame)
