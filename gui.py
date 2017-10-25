@@ -4,6 +4,35 @@ import csv
 import random
 import tkinter.messagebox
 import datetime
+import pyotp
+import telepot
+
+def telegramRead():
+    bot = telepot.Bot("370325529:AAGKGqP-dHRoyKb2FKnPtMyYCdOhcGKLK5Q")
+    response = bot.getUpdates()  # pakt het laatst verzonden bericht aan de bot
+    response_1 = response[-1]
+    UserID = response_1['message']['chat']['id']  # pakt het ID van de verzender
+    UserBericht = response_1['message']['text']
+
+    return UserBericht
+
+
+def captcha_check():
+    if status_inloggen != 0:
+        hotp = pyotp.HOTP('base32secret3232')
+        random_seed = random.randint(9999, 99999)
+        print(hotp.at(random_seed))
+
+        first_check = telegramRead()
+        check_via_input = telegramRead()
+
+        if check_via_input != first_check:
+            if hotp.verify(check_via_input, random_seed) == True:
+                print("True")
+
+            else:
+                print("Foute code, probeer het nog een keer.")
+
 
 def csvread(bestandsnaam):
     with open("database/" + bestandsnaam, "r") as ReadMyCsv:
@@ -92,15 +121,33 @@ def inlog_stallen():
         else:
             pass
 
-    if status_inloggen == 0:
+    if status_inloggen != 0:
+        hotp = pyotp.HOTP('base32secret3232')
+        random_seed = random.randint(9999, 99999)
+
+        first_check = telegramRead()
+        tkinter.messagebox.showinfo("", "check je telefoon\n" + hotp.at(random_seed))
+        check_via_input = telegramRead()
+
+        if check_via_input != first_check:
+            if hotp.verify(check_via_input, random_seed) == True:
+                print("True")
+                status_inloggen -= 1
+
+            else:
+                print("Foute code, probeer het nog een keer.")
+    else:
+        pass
+
+    if status_inloggen == 1:
         tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
     else:
         gegevens_stalling = str(fietsnummer) + ";" + datum
-        registrerengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets stallen")
+        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets stallen")
         bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
         bestand.write(gegevens_stalling + '\n')
         bestand.close()
-        if registrerengelukt == "ok":
+        if inloggengelukt == "ok":
             return toonHoofdFrame()
 
 
@@ -132,12 +179,11 @@ def inlog_ophalen():
     if status_inloggen == 0:
         tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
     else:
-        registrerengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets ophalen")
+        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets ophalen")
 
         for fiets in gegevens_gestald:
             if fiets['fietsnummer'] == fietsnummer:
                 gegevens_gestald.remove(fiets)
-                print("Fiets kan opgehaald worden.. ")
 
         with open("database/gestald.csv", "w", newline='\n') as WriteMyCsv:
             veldnamen = ["fietsnummer", "staldatum"]
@@ -147,7 +193,7 @@ def inlog_ophalen():
             for gegeven in gegevens_gestald:
                 writer.writerow((gegeven))
 
-        if registrerengelukt == "ok":
+        if inloggengelukt == "ok":
             return toonHoofdFrame()
 
 
@@ -161,6 +207,7 @@ def algemene_informatie_aanvragen():
     #print("De kosten voor het bergen van uw fiets zijn \u20ac2.5 per dag.")
     #print("De eerste dag is gratis.")
 
+
 def toonHoofdFrame():
     registermenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
@@ -170,18 +217,22 @@ def toonHoofdFrame():
     persoonlijkeInformatieFrame.pack_forget()
     hoofdmenuFrame.pack(padx=50, pady=10)
 
+
 def toonRegisterFrame():
     hoofdmenuFrame.pack_forget()
     registermenuFrame.pack(padx=10, pady=10)
+
 
 def toonStallenFrame():
     hoofdmenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
     stallenmenuFrame.pack(padx=10, pady=10)
 
+
 def toonOphalenFrame():
     hoofdmenuFrame.pack_forget()
     ophalenmenuFrame.pack(padx=10, pady=10)
+
 
 def toonInformatieFrame():
     hoofdmenuFrame.pack_forget()
@@ -189,14 +240,17 @@ def toonInformatieFrame():
     persoonlijkeInformatieFrame.pack_forget()
     informatiemenuFrame.pack(padx=50, pady=10)
 
+
 def toonAlgemeneInformatieFrame():
     informatiemenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack()
+
 
 def toonPersoonlijkeInformatieFrame():
     hoofdmenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
     persoonlijkeInformatieFrame.pack()
+
 
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
