@@ -211,7 +211,9 @@ def inlog_ophalen():
         pass
 
     if status_inloggen == 1:
-        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets ophalen")
+        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd." +
+                                                     "\nJe kan je fiets ophalen" +
+                                                     "\nDe kosten zijn: \u20ac" + str(prijs_te_betalen(username)))
 
         for fiets in gegevens_gestald:
             if fiets['fietsnummer'] == fietsnummer:
