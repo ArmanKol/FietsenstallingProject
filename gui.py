@@ -144,6 +144,33 @@ def inlog_stallen():
         pass
 
 
+def prijs_te_betalen(mail):
+    gebruiker_gegevens = csvread("gebruikers.csv")
+    stalling_gegevens = csvread("gestald.csv")
+
+    for gebruiker_gegeven in gebruiker_gegevens:
+        if mail == gebruiker_gegeven["mail"]:
+            for fietsdata in stalling_gegevens:
+                if gebruiker_gegeven["fietsnummer"] == fietsdata["fietsnummer"]:
+                    datum = fietsdata["staldatum"]
+
+                    datum = datum.split("/")
+                    vandaag = datetime.datetime.today()
+                    datum_vandaag = datetime.date(int(vandaag.strftime("%Y")), int(vandaag.strftime("%m")),
+                                                  int(vandaag.strftime("%d")))
+                    datum_gestald = datetime.date(int(datum[2]), int(datum[1]), int(datum[0]))
+                    aantal_dagen_gestald = datum_vandaag - datum_gestald
+                    aantal_dagen_gestald = (str(aantal_dagen_gestald)).split(" ")
+
+                    if str(aantal_dagen_gestald[0]) == "0:00:00":
+                        aantal_dagen_gestald = [0]
+
+                    if int(aantal_dagen_gestald[0]) <= 1:
+                        return 0
+                    else:
+                        return int(aantal_dagen_gestald[0]) - 1 * 2.5
+
+
 def inlog_ophalen():
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
@@ -196,6 +223,55 @@ def algemene_informatie_aanvragen():
     vrije_plekken = 1000 - (len(gegevens) + 1)
 
     return vrije_plekken
+
+
+def persoonlijke_informatie_aanvragen():
+    gegevens_gebruiker = csvread("gebruikers.csv")
+    gegevens_gestald = csvread("gestald.csv")
+
+    username = inlogNaamPersoonlijk_entry.get()
+    password = inlogWachtwoordPersoonlijk_entry.get()
+
+    status_inloggen = 0
+
+    for item in gegevens_gebruiker:
+        if str(item['wachtwoord']) == password and str(item['mail']) == username:
+            status_inloggen = 1
+        else:
+            pass
+    if status_inloggen == 0:
+        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
+    else:
+        pass
+
+    # telegram check voor two-factor authenticatie
+    if status_inloggen == 1:
+        status_inloggen =  captcha_check()
+    else:
+        pass
+
+    if status_inloggen == 1:
+        for gebruiker_gegeven in gegevens_gebruiker:
+            if username == gebruiker_gegeven['mail']:
+                naam = gebruiker_gegeven['naam']
+                fietsnummer = gebruiker_gegeven['fietsnummer']
+                telefoonnummer = gebruiker_gegeven['telefoonnummer']
+
+                for stal_gegeven in gegevens_gestald:
+                    if gebruiker_gegeven['fietsnummer'] == stal_gegeven['fietsnummer']:
+                        stal_datum = stal_gegeven['staldatum']
+                        tkinter.messagebox.showinfo("", "Uw unieke fietsnummer: " + str(fietsnummer) +
+                                                    "\nUw naam: " + naam +
+                                                    "\nUw telefoonnummer: " + telefoonnummer +
+                                                    "\nUw e-mail adres: " + username +
+                                                    "\nUw fiets staat gestald sinds: " + stal_datum +
+                                                    "\nDe kosten op dit moment: \u20ac" + str(prijs_te_betalen(username)))
+
+                toonHoofdFrame()
+
+    return
+
+
 
 
 def toonHoofdFrame():
@@ -405,7 +481,7 @@ persoonlijkeInformatieFrame = tkinter.Frame(root)
 persoonlijkeInformatieFrame.configure(background="yellow")
 persoonlijkeInformatieFrame.pack()
 
-inlogNaamPersoonlijk_label = tkinter.Label(master=persoonlijkeInformatieFrame, text="Voer hier je naam/e-mailadres in: ", background="yellow")
+inlogNaamPersoonlijk_label = tkinter.Label(master=persoonlijkeInformatieFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamPersoonlijk_label.grid(row=0, column=0, pady=5)
 
 inlogNaamPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInformatieFrame)
@@ -417,7 +493,7 @@ inlogWachtwoordPersoonlijk_label.grid(row=1, column=0)
 inlogWachtwoordPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInformatieFrame, show="*")
 inlogWachtwoordPersoonlijk_entry.grid(row=1, column=1)
 
-inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInformatieFrame, text="Log in")
+inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInformatieFrame, text="Log in", command=persoonlijke_informatie_aanvragen)
 inlogKnopPersoonlijk_button.grid(row=2, column=1)
 
 knopterugPersoonlijkeInformatie = tkinter.Button(master= persoonlijkeInformatieFrame, text="Terug", command=toonInformatieFrame)
