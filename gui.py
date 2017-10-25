@@ -7,6 +7,7 @@ import datetime
 import pyotp
 import telepot
 
+
 def telegramRead():
     bot = telepot.Bot("370325529:AAGKGqP-dHRoyKb2FKnPtMyYCdOhcGKLK5Q")
     response = bot.getUpdates()  # pakt het laatst verzonden bericht aan de bot
@@ -18,20 +19,16 @@ def telegramRead():
 
 
 def captcha_check():
-    if status_inloggen != 0:
-        hotp = pyotp.HOTP('base32secret3232')
-        random_seed = random.randint(9999, 99999)
-        print(hotp.at(random_seed))
+    hotp = pyotp.HOTP('base32secret3232')
+    random_seed = random.randint(9999, 99999)
+    tkinter.messagebox.showinfo("", "Ga naar: http://t.me/BevFietsBot" + "\nen stuur deze code: " + hotp.at(random_seed) + "\nGa na versturen verder.")
+    telegram_output = telegramRead()
 
-        first_check = telegramRead()
-        check_via_input = telegramRead()
-
-        if check_via_input != first_check:
-            if hotp.verify(check_via_input, random_seed) == True:
-                print("True")
-
-            else:
-                print("Foute code, probeer het nog een keer.")
+    if hotp.verify(telegram_output, random_seed) == True:
+        return 1
+    else:
+        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
+        return 0
 
 
 def csvread(bestandsnaam):
@@ -94,6 +91,7 @@ def registreren():
 
 
 def inlog_stallen():
+    # gegevens voor het stallen
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
 
@@ -107,48 +105,43 @@ def inlog_stallen():
     status_inloggen = 0
     fietsnummer_lijst = []
 
-    for gegeven in gegevens_gestald:
-        fietsnummer_lijst.append(gegeven['fietsnummer'])
-
-    if fietsnummer in fietsnummer_lijst:
-        tkinter.messagebox.showinfo("", "Fiets staat al in stalling..")
-    else:
-        pass
-
+    # controleren gegevens gebruiker
     for item in gegevens_gebruiker:
         if str(item['wachtwoord']) == password and str(item['mail']) == username:
-            status_inloggen += 1
+            status_inloggen = 1
         else:
             pass
-
-    if status_inloggen != 0:
-        hotp = pyotp.HOTP('base32secret3232')
-        random_seed = random.randint(9999, 99999)
-
-        first_check = telegramRead()
-        tkinter.messagebox.showinfo("", "check je telefoon\n" + hotp.at(random_seed))
-        check_via_input = telegramRead()
-
-        if check_via_input != first_check:
-            if hotp.verify(check_via_input, random_seed) == True:
-                print("True")
-                status_inloggen -= 1
-
-            else:
-                print("Foute code, probeer het nog een keer.")
+    if status_inloggen == 0:
+        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
     else:
         pass
 
-    if status_inloggen == 1:
-        tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
+    # controleren of fiets al in de stalling staat
+    for gegeven in gegevens_gestald:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+    if fietsnummer in fietsnummer_lijst:
+        tkinter.messagebox.showinfo("", "Fiets staat al in stalling..")
+        status_inloggen = 0
     else:
+        pass
+
+    # telegram check voor two-factor authenticatie
+    if status_inloggen == 1:
+        status_inloggen = captcha_check()
+    else:
+        pass
+
+    # fiets opslaan in bestand en succes bericht geven aan gebruiker
+    if status_inloggen == 1:
         gegevens_stalling = str(fietsnummer) + ";" + datum
-        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets stallen")
+        inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je fiets is gestald")
         bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
         bestand.write(gegevens_stalling + '\n')
         bestand.close()
         if inloggengelukt == "ok":
             return toonHoofdFrame()
+    else:
+        pass
 
 
 def inlog_ophalen():
