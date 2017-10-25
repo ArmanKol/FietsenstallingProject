@@ -135,7 +135,7 @@ def inlog_stallen():
     if status_inloggen == 1:
         gegevens_stalling = str(fietsnummer) + ";" + datum
         inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je fiets is gestald")
-        bestand = open('database/gestald.csv', 'a')  # nog in een fucntie zetten?
+        bestand = open('database/gestald.csv', 'a')
         bestand.write(gegevens_stalling + '\n')
         bestand.close()
         if inloggengelukt == "ok":
@@ -145,6 +145,7 @@ def inlog_stallen():
 
 
 def inlog_ophalen():
+    # gegevens voor het ophalen van de fiets
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
 
@@ -155,23 +156,34 @@ def inlog_ophalen():
     status_inloggen = 0
     fietsnummer_lijst = []
 
-    for gegeven in gegevens_gestald:
-        fietsnummer_lijst.append(gegeven['fietsnummer'])
 
-    if fietsnummer not in fietsnummer_lijst:
-        tkinter.messagebox.showinfo("", "Fiets staat niet in stalling..")
-    else:
-        pass
-
+    # controleren gegevens gebruiker
     for item in gegevens_gebruiker:
         if str(item['wachtwoord']) == password and str(item['mail']) == username:
-            status_inloggen += 1
+            status_inloggen = 1
         else:
             pass
-
     if status_inloggen == 0:
         tkinter.messagebox.showinfo("", "Inlog gegevens niet correct")
     else:
+        pass
+
+    # controleren of fiets in de stalling staat
+    for gegeven in gegevens_gestald:
+        fietsnummer_lijst.append(gegeven['fietsnummer'])
+    if fietsnummer not in fietsnummer_lijst:
+        tkinter.messagebox.showinfo("", "Fiets staat niet in stalling..")
+        status_inloggen = 0
+    else:
+        pass
+
+    # telegram check voor two-factor authenticatie
+    if status_inloggen == 1:
+        status_inloggen = captcha_check()
+    else:
+        pass
+
+    if status_inloggen == 1:
         inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd.\n" + "Je kan je fiets ophalen")
 
         for fiets in gegevens_gestald:
@@ -188,6 +200,8 @@ def inlog_ophalen():
 
         if inloggengelukt == "ok":
             return toonHoofdFrame()
+    else:
+        pass
 
 
 def algemene_informatie_aanvragen():
@@ -217,9 +231,12 @@ def toonRegisterFrame():
 
 
 def toonStallenFrame():
-    hoofdmenuFrame.pack_forget()
-    informatiemenuFrame.pack_forget()
-    stallenmenuFrame.pack(padx=10, pady=10)
+    if algemene_informatie_aanvragen() > 0:
+        hoofdmenuFrame.pack_forget()
+        informatiemenuFrame.pack_forget()
+        stallenmenuFrame.pack(padx=10, pady=10)
+    else:
+        tkinter.messagebox.showinfo("", "Er zijn geen plekke beschikbaar")
 
 
 def toonOphalenFrame():
