@@ -50,7 +50,7 @@ def registreren():
 
     if gegevens_status == 2:
         nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
-        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd.")
+        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd.\n"+" Fietsnummer: "+str(fietsnummer))
         bestand = open('database/gebruikers.csv', 'a')
         bestand.write(nieuwe_gegevens + '\n')
         bestand.close()
@@ -58,8 +58,6 @@ def registreren():
             return toonHoofdFrame()
     else:
         pass
-
-    return fietsnummer
 
 def algemene_informatie_aanvragen():
     gegevens = csvread("gestald.csv")
