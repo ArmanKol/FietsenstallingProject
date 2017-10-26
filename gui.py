@@ -80,7 +80,8 @@ def registreren():
 
     if gegevens_status == 2:
         nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
-        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd.\n"+"Fietsnummer: "+str(fietsnummer))
+        registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd." +
+                                                        "\n"+"Fietsnummer: "+str(fietsnummer))
         bestand = open('database/gebruikers.csv', 'a')
         bestand.write(nieuwe_gegevens + '\n')
         bestand.close()
@@ -252,6 +253,7 @@ def persoonlijke_informatie_aanvragen():
 
     for item in gegevens_gebruiker:
         if str(item['wachtwoord']) == password and str(item['mail']) == username:
+            fietsnummer = item['fietsnummer']
             status_inloggen = 1
         else:
             pass
@@ -280,13 +282,18 @@ def persoonlijke_informatie_aanvragen():
                                                     "\nUw naam: " + naam +
                                                     "\nUw telefoonnummer: " + telefoonnummer +
                                                     "\nUw e-mail adres: " + username +
-                                                    "\nUw fiets staat gestald sinds: " + stal_datum +
+                                                    "\nUw fiets staat gestald sinds: " + str(stal_datum) +
                                                     "\nDe kosten op dit moment: \u20ac" + str(prijs_te_betalen(username)))
+                    else:
+                        stal_datum = "Fiets is niet gestald."
+                        tkinter.messagebox.showinfo("", "Uw unieke fietsnummer: " + str(fietsnummer) +
+                                                    "\nUw naam: " + naam +
+                                                    "\nUw telefoonnummer: " + telefoonnummer +
+                                                    "\nUw e-mail adres: " + username +
+                                                    "\nUw fiets staat gestald sinds: " + str(stal_datum) +
+                                                    "\nDe kosten op dit moment: \u20ac0")
 
                 toonHoofdFrame()
-
-    return
-
 
 
 
