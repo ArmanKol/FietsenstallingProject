@@ -377,7 +377,7 @@ def trein_tijden():
         datum_en_tijd = str(treindata['ActueleVertrekTijd'])
         datum_en_tijd = datum_en_tijd.split("T")
         tijd = datum_en_tijd[1].split(":")
-        uren = int(tijd[0]) + 2
+        uren = int(tijd[0]) + 1
         if uren > 23:
             uren -= 24
 
