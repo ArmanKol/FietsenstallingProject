@@ -8,21 +8,21 @@ import pyotp
 import telepot
 
 
-def telegramRead():
+def telegram_read():
     bot = telepot.Bot("370325529:AAGKGqP-dHRoyKb2FKnPtMyYCdOhcGKLK5Q")
-    response = bot.getUpdates()  # pakt het laatst verzonden bericht aan de bot
+    response = bot.getUpdates()
     response_1 = response[-1]
-    UserID = response_1['message']['chat']['id']  # pakt het ID van de verzender
     UserBericht = response_1['message']['text']
 
     return UserBericht
 
 
-def captcha_check():
+def telegram_check():
     hotp = pyotp.HOTP('base32secret3232')
     random_seed = random.randint(9999, 99999)
-    tkinter.messagebox.showinfo("", "Ga naar: http://t.me/BevFietsBot" + "\nen stuur deze code: " + hotp.at(random_seed) + "\nGa na versturen verder.")
-    telegram_output = telegramRead()
+    tkinter.messagebox.showinfo("", "Ga naar: http://t.me/BevFietsBot" + "\nen stuur deze code: " + hotp.at(random_seed)
+                                + "\nGa na versturen verder.")
+    telegram_output = telegram_read()
 
     if hotp.verify(telegram_output, random_seed) == True:
         return 1
@@ -49,26 +49,28 @@ def registreren():
 
     mail_lijst = []
 
-    wachtwoord = wachtwoord_entry.get()
-    naam = naam_entry.get()
-    mail = email_entry.get()
-    telefoonnummer = telefoonnummer_entry.get()
+    naam = naam_entry.get().lower()
+    mail = email_entry.get().lower()
+    wachtwoord = wachtwoord_entry.get().lower()
+    telefoonnummer = telefoonnummer_entry.get().lower()
 
+    # controle of mail al geregistreerd is
     for gegeven in gegevens_gebruikers:
         mail_lijst.append(gegeven['mail'])
-
     if mail in mail_lijst:
         tkinter.messagebox.showinfo("", "Dit e-mail adress is al geregistreerd.")
     else:
         gegevens_status += 1
         pass
 
+    # controle op lengte wachtwoord
     if len(wachtwoord) <= 6:
         tkinter.messagebox.showinfo("", "Je hebt een te korte wachtwoord ingevoerd.")
     else:
         gegevens_status += 1
         pass
 
+    # genereren random fietsnummer
     fietsnummer = int(random.randint(1000, 9999))
 
     fietsnummer_lijst = []
@@ -78,6 +80,7 @@ def registreren():
     while str(fietsnummer) in fietsnummer_lijst:
         fietsnummer = int(random.randint(1000, 9999))
 
+    # gegevens opslaan in bestand
     if gegevens_status == 2:
         nieuwe_gegevens = str(fietsnummer) + ';' + naam + ';' + mail + ';' + wachtwoord + ';' + str(telefoonnummer)
         registrerengelukt = tkinter.messagebox.showinfo("","Je bent succesvol geregistreerd." +
@@ -85,6 +88,12 @@ def registreren():
         bestand = open('database/gebruikers.csv', 'a')
         bestand.write(nieuwe_gegevens + '\n')
         bestand.close()
+
+        naam_entry.delete(0, 'end')
+        email_entry.delete(0, 'end')
+        wachtwoord_entry.delete(0, 'end')
+        telefoonnummer_entry.delete(0, 'end')
+
         if registrerengelukt == "ok":
             return toonHoofdFrame()
     else:
@@ -99,9 +108,9 @@ def inlog_stallen():
     vandaag = datetime.datetime.today()
     datum = vandaag.strftime('%d/%m/%Y')
 
-    username = inlogNaamStallen_entry.get()
-    password = inlogWachtwoordStallen_entry.get()
-    fietsnummer = inlogFietsnummerStallen_entry.get()
+    username = inlogNaamStallen_entry.get().lower()
+    password = inlogWachtwoordStallen_entry.get().lower()
+    fietsnummer = inlogFietsnummerStallen_entry.get().lower()
 
     status_inloggen = 0
     fietsnummer_lijst = []
@@ -128,7 +137,7 @@ def inlog_stallen():
 
     # telegram check voor two-factor authenticatie
     if status_inloggen == 1:
-        status_inloggen = captcha_check()
+        status_inloggen = telegram_check()
     else:
         pass
 
@@ -139,6 +148,11 @@ def inlog_stallen():
         bestand = open('database/gestald.csv', 'a')
         bestand.write(gegevens_stalling + '\n')
         bestand.close()
+
+        inlogNaamStallen_entry.delete(0, 'end')
+        inlogWachtwoordStallen_entry.delete(0, 'end')
+        inlogFietsnummerStallen_entry.delete(0, 'end')
+
         if inloggengelukt == "ok":
             return toonHoofdFrame()
     else:
@@ -177,9 +191,9 @@ def inlog_ophalen():
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
 
-    username = inlogNaamOphalen_entry.get()
-    password = inlogWachtwoordOphalen_entry.get()
-    fietsnummer = inlogFietsnummerOphalen_entry.get()
+    username = inlogNaamOphalen_entry.get().lower()
+    password = inlogWachtwoordOphalen_entry.get().lower()
+    fietsnummer = inlogFietsnummerOphalen_entry.get().lower()
 
     status_inloggen = 0
     fietsnummer_lijst = []
@@ -207,10 +221,11 @@ def inlog_ophalen():
 
     # telegram check voor two-factor authenticatie
     if status_inloggen == 1:
-        status_inloggen = captcha_check()
+        status_inloggen = telegram_check()
     else:
         pass
 
+    # Gebruiker informeren dat inloggen succesvol is en gestalde fiets uit bestand verwijderen
     if status_inloggen == 1:
         inloggengelukt = tkinter.messagebox.showinfo("", "Je bent succesvol ingelogd." +
                                                      "\nJe kan je fiets ophalen" +
@@ -227,6 +242,10 @@ def inlog_ophalen():
 
             for gegeven in gegevens_gestald:
                 writer.writerow((gegeven))
+
+        inlogNaamOphalen_entry.delete(0, 'end')
+        inlogWachtwoordOphalen_entry.delete(0, 'end')
+        inlogFietsnummerOphalen_entry.delete(0, 'end')
 
         if inloggengelukt == "ok":
             return toonHoofdFrame()
@@ -264,7 +283,7 @@ def persoonlijke_informatie_aanvragen():
 
     # telegram check voor two-factor authenticatie
     if status_inloggen == 1:
-        status_inloggen =  captcha_check()
+        status_inloggen =  telegram_check()
     else:
         pass
 
@@ -293,8 +312,9 @@ def persoonlijke_informatie_aanvragen():
                                                     "\nUw fiets staat gestald sinds: " + str(stal_datum) +
                                                     "\nDe kosten op dit moment: \u20ac0")
 
+                inlogNaamPersoonlijk_entry.delete(0, 'end')
+                inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
                 toonHoofdFrame()
-
 
 
 def toonHoofdFrame():
@@ -318,7 +338,7 @@ def toonStallenFrame():
         informatiemenuFrame.pack_forget()
         stallenmenuFrame.pack(padx=10, pady=10)
     else:
-        tkinter.messagebox.showinfo("", "Er zijn geen plekke beschikbaar")
+        tkinter.messagebox.showinfo("", "Er zijn geen plekken beschikbaar")
 
 
 def toonOphalenFrame():
