@@ -237,11 +237,14 @@ def inlog_ophalen():
         pass
 
     # controleren of fiets in de stalling staat
-    for gegeven in gegevens_gestald:
-        fietsnummer_lijst.append(gegeven['fietsnummer'])
-    if fietsnummer not in fietsnummer_lijst:
-        tkinter.messagebox.showinfo("", "Fiets staat niet in stalling..")
-        status_inloggen = 0
+    if status_inloggen == 1:
+        for gegeven in gegevens_gestald:
+            fietsnummer_lijst.append(gegeven['fietsnummer'])
+        if fietsnummer not in fietsnummer_lijst:
+            tkinter.messagebox.showinfo("", "Fiets staat niet in stalling..")
+            status_inloggen = 0
+        else:
+            pass
     else:
         pass
 
@@ -582,7 +585,7 @@ knopterugOphalen.grid(row=3, column=0, pady=5)
 inlogKnopOphalen = tkinter.Button(master=ophalenmenuFrame, text="Log in", command=inlog_ophalen)
 inlogKnopOphalen.grid(row=3, column=1)
 
-#Informatie opvragen
+# Informatie opvragen
 informatiemenuFrame = tkinter.Frame(root)
 informatiemenuFrame.configure(background="yellow")
 informatiemenuFrame.pack()
