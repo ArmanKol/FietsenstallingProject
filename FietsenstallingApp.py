@@ -393,7 +393,7 @@ def trein_tijden():
     except:
         tkinter.messagebox.showinfo("", "Dit station is niet gevonden of het is fout getyped.")
 
-
+#toonHoofdFrame() zorgt ervoor dat alle andere frames worden weggehaald en alleen het hoofdmenuframe laat zien.
 def toonHoofdFrame():
     registermenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
@@ -405,12 +405,13 @@ def toonHoofdFrame():
     treinTijdenFrame.pack_forget()
     hoofdmenuFrame.pack(padx=50, pady=10)
 
-
+#Als je van hoofdmenu naar "Fiets registreren" gaat dan wordt het hoofdmenu weggehaald en vervolgens wordt het registerFrame opgeroepen.
 def toonRegisterFrame():
     hoofdmenuFrame.pack_forget()
     registermenuFrame.pack(padx=10, pady=10)
 
-
+#Algemene_informatie_aanvragen geeft het aantal plaatsen terug die nog vrij zijn. Bij meer dan 0 plaatsen wordt het hoofdmenu weggehaald en
+#kom je in het "Fiets stallen" menu terecht. Als er geen plekken beschikbaar zijn dan krijg je een popup met de tekst "Er zijn geen plekken beschikbaar."
 def toonStallenFrame():
     if algemene_informatie_aanvragen() > 0:
         hoofdmenuFrame.pack_forget()
@@ -419,12 +420,13 @@ def toonStallenFrame():
     else:
         tkinter.messagebox.showinfo("", "Er zijn geen plekken beschikbaar")
 
-
+#Als je op de knop "Fiets ophalen" klikt dan wordt het hoofdmenu weggehaald en kom je in het "Fiets ophalen" menu terecht.
 def toonOphalenFrame():
     hoofdmenuFrame.pack_forget()
     ophalenmenuFrame.pack(padx=10, pady=10)
 
-
+#Bij het klikken op het "Informatie aanvragen" knop wordt het hoofdmenuFrame weggehaald en wordt het informatiemenuFrame gepackt die dan vervolgens op je beelscherm te zien is.
+#In de functie staan ook andere Frames die worden weggehaald. Als we dat niet doen dan komen er verschillende frames op een venster.
 def toonInformatieFrame():
     hoofdmenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack_forget()
@@ -432,49 +434,55 @@ def toonInformatieFrame():
     treinTijdenFrame.pack_forget()
     informatiemenuFrame.pack(padx=50, pady=10)
 
-
+#Als er op "Informatie opvragen" wordt geklikt en je gaat vervolgens naar "Algemene informatie".
+#Dan zorgt dit ervoor dat de informatiemenuFrame wordt weggehaald en vervolgens de "Algemene informatie" menu laat zien.
 def toonAlgemeneInformatieFrame():
     informatiemenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack(padx=10, pady=10)
 
-
+#Als er op "Informatie aanvragen" wordt geklikt en je gaat vervolgens door naar "Persoonlijke informatie".
+#Dan zorgt dit ervoor dat je het hoofd menu en de informatie menu vergeet.
+#Bij het klikken op "Persoonlijke informatie" wordt een inlog menu geopend met persoonlijkeInlogFrame.
 def toonPersoonlijkeInlogFrame():
     hoofdmenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
     persoonlijkeInlogFrame.pack()
 
-
+#Als er op "Log in" wordt geklikt in het inlogscherm van "persoonlijke informatie", dan zorgt dit ervoor dat het
+#inlogscherm wordt vergeten en vervolgens een menu opent met je persoonlijke informatie.
 def toonPersoonlijkeInformatieFrame():
     persoonlijkeInlogFrame.pack_forget()
     persoonlijkeInformatieFrame.pack(padx=10, pady=10)
 
-
+#Als er op "Informatie aanvragen" wordt geklikt en daar op "Trein tijden".Dan zorgt dit ervoor dat we de "Invormatie aanvragen" frame weghalen
+#en de treintijden frame laten zien.
 def toonTreinTijdenFrame():
     informatiemenuFrame.pack_forget()
     treinTijdenFrame.pack(padx=10, pady=10)
 
 
-
 filecheck()
 
+#Root van de gui. Dit zorgt ervoor dat je een venster maakt. root.resizable is dat je het venster niet kunt vergroten.
+#Daarna hebben we configure die in dit geval ervoor zorgt dat we een gele achtergrond krijgen.
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
 root.resizable(False, False)
 root.configure(background="yellow")
 
-#nslogo = tkinter.PhotoImage("C:\\Users\\Arman.K\\PycharmProjects\\FietsenstallingProject\\nslogo.png")
 
-#Hoofdmenu
+
+
+#Hoofdmenu. Dit maakt een frame aan.
 hoofdmenuFrame = tkinter.Frame(root)
 hoofdmenuFrame.configure(background="yellow")
 hoofdmenuFrame.pack()
 
-#backgroundFrame = tkinter.Label(master=hoofdmenuFrame, image=nslogo)
-#backgroundFrame.grid(row=0)
-
+##Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het hoofdmenu frame.
 titel_label = tkinter.Label(master=hoofdmenuFrame, text="NS-Fietsstalling", background="yellow", font=20)
 titel_label.grid(row=0, column=0, pady=5)
 
+#Hier worden knoppen gemaakt die je in het hoofdmenu frame terug ziet komen.
 registrerenknop = tkinter.Button(master=hoofdmenuFrame, text="Fiets registreren", width=25, command=toonRegisterFrame)
 registrerenknop.grid(row=1, column=0, pady=5)
 
@@ -491,105 +499,141 @@ informatieOpvragenKnop.grid(row=4, column=0, pady=5)
 knopAfsluiten = tkinter.Button(master=hoofdmenuFrame, text="Afsluiten", width=25, command=sys.exit)
 knopAfsluiten.grid(row=5, column=0, pady=5)
 
-#Registreren
+
+
+
+#Registreren. Hier wordt een frame aangemaakt voor het menu "Fiets registreren".
 registermenuFrame = tkinter.Frame(root)
 registermenuFrame.configure(background="yellow")
 registermenuFrame.pack()
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het register menu frame.
 naam_label = tkinter.Label(master=registermenuFrame, text="Voer hier je naam in: ", background="yellow")
 naam_label.grid(row=0, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het register menu frame
 naam_entry = tkinter.Entry(registermenuFrame)
 naam_entry.grid(row=0, column=1)
 naam_entry.delete(0, "end")
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het register menu frame.
 wachtwoord_label = tkinter.Label(master=registermenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 wachtwoord_label.grid(row=1, column=0)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het register menu frame
 wachtwoord_entry = tkinter.Entry(registermenuFrame)
 wachtwoord_entry.grid(row=1, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het register menu frame.
 telefoonnummer_label = tkinter.Label(master=registermenuFrame, text="Voer hier je telefoonnummer in: ", background="yellow")
 telefoonnummer_label.grid(row=2, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het register menu frame
 telefoonnummer_entry = tkinter.Entry(registermenuFrame)
 telefoonnummer_entry.grid(row=2, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het register menu frame.
 email_label = tkinter.Label(master=registermenuFrame, text="Voer hier je e-mail in: ", background="yellow")
 email_label.grid(row=3, column=0)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het register menu frame
 email_entry = tkinter.Entry(registermenuFrame)
 email_entry.grid(row=3, column=1)
 
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het register frame te zien zijn.
 knopregistreer = tkinter.Button(master=registermenuFrame, text="Registreer", command=registreren)
 knopregistreer.grid(row=4, column=1, pady=5)
 
 knopterugRegistreren = tkinter.Button(master=registermenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugRegistreren.grid(row=4, column=0, pady=5)
 
-#Stallen
+
+
+
+#Stallen. Hier wordt een frame aangemaakt voor het menu "Fiets stallen".
 stallenmenuFrame = tkinter.Frame(root)
 stallenmenuFrame.configure(background="yellow")
 stallenmenuFrame.pack()
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het stallen menu frame.
 inlogNaamStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamStallen_label.grid(row=0, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen.
 inlogNaamStallen_entry = tkinter.Entry(master=stallenmenuFrame)
 inlogNaamStallen_entry.grid(row=0, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het stallen menu frame.
 inlogWachtwoordStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordStallen_label.grid(row=1, column=0)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het stallen menu frame
 inlogWachtwoordStallen_entry = tkinter.Entry(master=stallenmenuFrame, show="*")
 inlogWachtwoordStallen_entry.grid(row=1, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het stallen menu frame.
 inlogFietsnummerStallen_label = tkinter.Label(master=stallenmenuFrame, text="Voer hier je fietsnummer in: ", background="yellow")
 inlogFietsnummerStallen_label.grid(row=2, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het stallen menu frame
 inlogFietsnummerStallen_entry = tkinter.Entry(master=stallenmenuFrame)
 inlogFietsnummerStallen_entry.grid(row=2, column=1)
 
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het stallen frame te zien zijn.
 inlogKnopStallen = tkinter.Button(master=stallenmenuFrame, text="Log in", command=inlog_stallen)
 inlogKnopStallen.grid(row=3, column=1, pady=5)
 
 knopterugStallen = tkinter.Button(master=stallenmenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugStallen.grid(row=3, column=0, pady=5)
 
-#Ophalen
+
+
+
+#Ophalen. Hier wordt een frame aangemaakt voor het menu "Fiets ophalen".
 ophalenmenuFrame = tkinter.Frame(root)
 ophalenmenuFrame.configure(background="yellow")
 ophalenmenuFrame.pack()
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het ophalen menu frame.
 inlogNaamOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamOphalen_label.grid(row=0, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het ophalen menu frame
 inlogNaamOphalen_entry = tkinter.Entry(master=ophalenmenuFrame)
 inlogNaamOphalen_entry.grid(row=0, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het ophalen menu frame.
 inlogWachtwoordOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordOphalen_label.grid(row=1, column=0)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het ophalen menu frame.
 inlogWachtwoordOphalen_entry = tkinter.Entry(master=ophalenmenuFrame, show="*")
 inlogWachtwoordOphalen_entry.grid(row=1, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het ophalen menu frame.
 inlogFietsnummerOphalen_label = tkinter.Label(master=ophalenmenuFrame, text="Voer hier je fietsnummer in: ", background="yellow")
 inlogFietsnummerOphalen_label.grid(row=2, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het ophalen menu frame.
 inlogFietsnummerOphalen_entry = tkinter.Entry(master=ophalenmenuFrame)
 inlogFietsnummerOphalen_entry.grid(row=2, column=1)
 
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het ophalen frame te zien zijn.
 knopterugOphalen = tkinter.Button(master=ophalenmenuFrame, text="Terug", command=toonHoofdFrame)
 knopterugOphalen.grid(row=3, column=0, pady=5)
 
 inlogKnopOphalen = tkinter.Button(master=ophalenmenuFrame, text="Log in", command=inlog_ophalen)
 inlogKnopOphalen.grid(row=3, column=1)
 
-# Informatie opvragen
+
+
+
+# Informatie opvragen. Hier wordt een frame aangemaakt voor het menu "Informatie aanvragen".
 informatiemenuFrame = tkinter.Frame(root)
 informatiemenuFrame.configure(background="yellow")
 informatiemenuFrame.pack()
 
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het ophalen frame te zien zijn.
 algemeneInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Algemene informatie", width=25, command=toonAlgemeneInformatieFrame)
 algemeneInformatieKnop.grid(row=0, column=0, pady=5)
 
@@ -602,11 +646,15 @@ treinTijdenKnop.grid(row=2, column=0, pady=5)
 knopterugInformatieOpvragen = tkinter.Button(master=informatiemenuFrame, text="Terug", width=25, command=toonHoofdFrame)
 knopterugInformatieOpvragen.grid(row=3, column=0, pady=5)
 
-#informatie opvragen/algemene informatie
+
+
+
+#informatie opvragen/algemene informatie. Hier wordt een frame aangemaakt voor het menu "algemene informatie".
 algemeneInformatiemenuFrame = tkinter.Frame(root)
 algemeneInformatiemenuFrame.configure(background="yellow")
 algemeneInformatiemenuFrame.pack()
 
+#Hier worden regels aangemaakt waar je tekst in kwijt kunt en vervolgens in de gui geplaats kan worden. In dit geval in het algemene informatie menu frame.
 aantalplekken_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="Er zijn nog "+str(algemene_informatie_aanvragen())+" van de 1000 plekken over.", background="yellow")
 aantalplekken_label.pack()
 
@@ -616,60 +664,80 @@ kostenperdag_label.pack()
 eerstedaggratis_label = tkinter.Label(master=algemeneInformatiemenuFrame, text="De eerste dag is gratis.", background="yellow")
 eerstedaggratis_label.pack()
 
+#Hier wordt een knop aangemaakt. Die ervoor zorgt dat je terug kunt keren naar de vorige menu.
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
 knopterugAlgemenInformatie.pack()
 
-#informatie opvragen/persoonlijke informatie/inlog
+
+
+
+#informatie opvragen/persoonlijke informatie/inlog. Hier wordt een frame aangemaakt voor het menu "persoonlijke informatie/inloggen".
+#Dit is het inlogmenu frame voor "persoonlijke informatie".
 persoonlijkeInlogFrame = tkinter.Frame(root)
 persoonlijkeInlogFrame.configure(background="yellow")
 persoonlijkeInlogFrame.pack()
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het persoonlijke informatie inlog menu frame.
 inlogNaamPersoonlijk_label = tkinter.Label(master=persoonlijkeInlogFrame, text="Voer hier je e-mailadres in: ", background="yellow")
 inlogNaamPersoonlijk_label.grid(row=0, column=0, pady=5)
 
 inlogNaamPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInlogFrame)
 inlogNaamPersoonlijk_entry.grid(row=0, column=1, padx=10)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het persoonlijke informatie inlog menu frame.
 inlogWachtwoordPersoonlijk_label = tkinter.Label(master=persoonlijkeInlogFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 inlogWachtwoordPersoonlijk_label.grid(row=1, column=0)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het persoonlijke informatie inlog menu frame.
 inlogWachtwoordPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInlogFrame, show="*")
 inlogWachtwoordPersoonlijk_entry.grid(row=1, column=1)
 
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het persoonlijke informatie inlog frame te zien zijn.
 inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInlogFrame, text="Log in", command=persoonlijke_informatie_aanvragen)
 inlogKnopPersoonlijk_button.grid(row=2, column=1)
 
 knopterugPersoonlijkeInformatie = tkinter.Button(master=persoonlijkeInlogFrame, text="Terug", command=toonInformatieFrame)
 knopterugPersoonlijkeInformatie.grid(row=2, column=0, pady=5)
 
-#informatie opvragen/persoonlijke informatie/inlog/informatie
+
+
+
+#informatie opvragen/persoonlijke informatie/inlog/informatie. Hier wordt een frame aangemaakt voor na het inloggen bij "persoonlijke informatie".
 persoonlijkeInformatieFrame = tkinter.Frame(root)
 persoonlijkeInformatieFrame.configure(background="yellow")
 persoonlijkeInformatieFrame.pack()
 
-#Informatie opvragen/trein tijden
+
+
+
+#Informatie opvragen/trein tijden. Hier wordt een frame aangemaakt voor het menu "Trein tijden".
 treinTijdenFrame = tkinter.Frame(root)
 treinTijdenFrame.configure(background="yellow")
 treinTijdenFrame.pack()
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het treintijden menu frame.
 treinTijdenBeginstation_label = tkinter.Label(master=treinTijdenFrame, text="Beginstation: ",background="yellow")
 treinTijdenBeginstation_label.grid(row=0, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het treintijden menu frame.
 treinTijdenBeginstation_entry = tkinter.Entry(master=treinTijdenFrame)
 treinTijdenBeginstation_entry.grid(row=0, column=1)
 
+#Hier wordt een stuk tekst aangemaakt die vervolgens in de gui geplaats kan worden. In dit geval in het treintijden menu frame.
 treinTijdenEindstation_label = tkinter.Label(master=treinTijdenFrame, text="Eindstation: ",background="yellow")
 treinTijdenEindstation_label.grid(row=1, column=0, pady=5)
 
+#Hier wordt een entry aangemaakt. In een entry kun je tekst typen. Deze entry kun je terug zien in het treintijden menu frame.
 treinTijdenEindstation_entry = tkinter.Entry(master=treinTijdenFrame)
 treinTijdenEindstation_entry.grid(row=1, column=1)
 
-
+#Hier worden verschillende knoppen aangemaakt die vervolgens in het treintijden frame te zien zijn.
 knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder", command=trein_tijden)
 knopverderTreinTijden.grid(row=2, column=1, pady=5)
 
 knopterugTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Terug", command=toonInformatieFrame)
 knopterugTreinTijden.grid(row=2, column=0)
+
 
 toonHoofdFrame()
 
