@@ -285,10 +285,10 @@ def persoonlijke_informatie_aanvragen():
         pass
 
     # telegram check voor two-factor authenticatie
-    if status_inloggen == 1:
-        status_inloggen =  telegram_check()
-    else:
-        pass
+    #if status_inloggen == 1:
+    #    status_inloggen =  telegram_check()
+    #else:
+    #    pass
 
     if status_inloggen == 1:
         for gebruiker_gegeven in gegevens_gebruiker:
@@ -300,25 +300,27 @@ def persoonlijke_informatie_aanvragen():
                 for stal_gegeven in gegevens_gestald:
                     if gebruiker_gegeven['fietsnummer'] == stal_gegeven['fietsnummer']:
                         stal_datum = stal_gegeven['staldatum']
-                        tkinter.messagebox.showinfo("", "Uw unieke fietsnummer: " + str(fietsnummer) +
+                        tekst1= ("Uw unieke fietsnummer: " + str(fietsnummer) +
                                                     "\nUw naam: " + naam +
                                                     "\nUw telefoonnummer: " + telefoonnummer +
                                                     "\nUw e-mail adres: " + username +
                                                     "\nUw fiets staat gestald sinds: " + str(stal_datum) +
                                                     "\nDe kosten op dit moment: \u20ac" + str(prijs_te_betalen(username)))
+                        return tekst1
                     else:
                         stal_datum = "Fiets is niet gestald."
-                        tkinter.messagebox.showinfo("", "Uw unieke fietsnummer: " + str(fietsnummer) +
+                        tekst2 = ("Uw unieke fietsnummer: " + str(fietsnummer) +
                                                     "\nUw naam: " + naam +
                                                     "\nUw telefoonnummer: " + telefoonnummer +
                                                     "\nUw e-mail adres: " + username +
                                                     "\nUw fiets staat gestald sinds: " + str(stal_datum) +
                                                     "\nDe kosten op dit moment: \u20ac0")
+                        return tekst2
 
                 inlogNaamPersoonlijk_entry.delete(0, 'end')
                 inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
 
-                toonHoofdFrame()
+                toonPersoonlijkeInformatieFrame()
 
 
 def toonHoofdFrame():
@@ -327,6 +329,7 @@ def toonHoofdFrame():
     algemeneInformatiemenuFrame.pack_forget()
     stallenmenuFrame.pack_forget()
     ophalenmenuFrame.pack_forget()
+    persoonlijkeInlogFrame.pack_forget()
     persoonlijkeInformatieFrame.pack_forget()
     hoofdmenuFrame.pack(padx=50, pady=10)
 
@@ -353,20 +356,23 @@ def toonOphalenFrame():
 def toonInformatieFrame():
     hoofdmenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack_forget()
-    persoonlijkeInformatieFrame.pack_forget()
+    persoonlijkeInlogFrame.pack_forget()
     informatiemenuFrame.pack(padx=50, pady=10)
 
 
 def toonAlgemeneInformatieFrame():
     informatiemenuFrame.pack_forget()
-    algemeneInformatiemenuFrame.pack()
+    algemeneInformatiemenuFrame.pack(padx=10, pady=10)
 
 
-def toonPersoonlijkeInformatieFrame():
+def toonPersoonlijkeInlogFrame():
     hoofdmenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
-    persoonlijkeInformatieFrame.pack()
+    persoonlijkeInlogFrame.pack()
 
+def toonPersoonlijkeInformatieFrame():
+    persoonlijkeInlogFrame.pack_forget()
+    persoonlijkeInformatieFrame.pack()
 
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
@@ -399,7 +405,7 @@ ophalenKnop.grid(row=3, column=0, pady=5)
 informatieOpvragenKnop = tkinter.Button(master=hoofdmenuFrame, text="Informatie opvragen", width=25, command=toonInformatieFrame)
 informatieOpvragenKnop.grid(row=4, column=0, pady=5)
 
-knopAfsluiten = tkinter.Button(master=hoofdmenuFrame, text="Afsluiten", width=25, command=sys.exit  )
+knopAfsluiten = tkinter.Button(master=hoofdmenuFrame, text="Afsluiten", width=25, command=sys.exit)
 knopAfsluiten.grid(row=5, column=0, pady=5)
 
 #Registreren
@@ -412,6 +418,7 @@ naam_label.grid(row=0, column=0, pady=5)
 
 naam_entry = tkinter.Entry(registermenuFrame)
 naam_entry.grid(row=0, column=1)
+naam_entry.delete(0, "end")
 
 wachtwoord_label = tkinter.Label(master=registermenuFrame, text="Voer hier je wachtwoord in: ", background="yellow")
 wachtwoord_label.grid(row=1, column=0)
@@ -503,7 +510,7 @@ informatiemenuFrame.pack()
 algemeneInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Algemene informatie", width=25, command=toonAlgemeneInformatieFrame)
 algemeneInformatieKnop.grid(row=0, column=0, pady=5)
 
-persoonlijkeInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Persoonlijke informatie", width=25, command=toonPersoonlijkeInformatieFrame)
+persoonlijkeInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Persoonlijke informatie", width=25, command=toonPersoonlijkeInlogFrame)
 persoonlijkeInformatieKnop.grid(row=1, column=0, pady=5)
 
 knopterugInformatieOpvragen = tkinter.Button(master=informatiemenuFrame, text="Terug", width=25, command=toonHoofdFrame)
@@ -526,28 +533,36 @@ eerstedaggratis_label.pack()
 knopterugAlgemenInformatie = tkinter.Button(master=algemeneInformatiemenuFrame, text="Terug", command=toonInformatieFrame)
 knopterugAlgemenInformatie.pack()
 
-#informatie opvragen/persoonlijke informatie
+#informatie opvragen/persoonlijke informatie/inlog
+persoonlijkeInlogFrame = tkinter.Frame(root)
+persoonlijkeInlogFrame.configure(background="yellow")
+persoonlijkeInlogFrame.pack()
+
+inlogNaamPersoonlijk_label = tkinter.Label(master=persoonlijkeInlogFrame, text="Voer hier je e-mailadres in: ", background="yellow")
+inlogNaamPersoonlijk_label.grid(row=0, column=0, pady=5)
+
+inlogNaamPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInlogFrame)
+inlogNaamPersoonlijk_entry.grid(row=0, column=1, padx=10)
+
+inlogWachtwoordPersoonlijk_label = tkinter.Label(master=persoonlijkeInlogFrame, text="Voer hier je wachtwoord in: ", background="yellow")
+inlogWachtwoordPersoonlijk_label.grid(row=1, column=0)
+
+inlogWachtwoordPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInlogFrame, show="*")
+inlogWachtwoordPersoonlijk_entry.grid(row=1, column=1)
+
+inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInlogFrame, text="Log in", command=persoonlijke_informatie_aanvragen)
+inlogKnopPersoonlijk_button.grid(row=2, column=1)
+
+knopterugPersoonlijkeInformatie = tkinter.Button(master=persoonlijkeInlogFrame, text="Terug", command=toonInformatieFrame)
+knopterugPersoonlijkeInformatie.grid(row=2, column=0, pady=5)
+
+#informatie opvragen/persoonlijke informatie/inlog/informatie
 persoonlijkeInformatieFrame = tkinter.Frame(root)
 persoonlijkeInformatieFrame.configure(background="yellow")
 persoonlijkeInformatieFrame.pack()
 
-inlogNaamPersoonlijk_label = tkinter.Label(master=persoonlijkeInformatieFrame, text="Voer hier je e-mailadres in: ", background="yellow")
-inlogNaamPersoonlijk_label.grid(row=0, column=0, pady=5)
-
-inlogNaamPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInformatieFrame)
-inlogNaamPersoonlijk_entry.grid(row=0, column=1, padx=10)
-
-inlogWachtwoordPersoonlijk_label = tkinter.Label(master=persoonlijkeInformatieFrame, text="Voer hier je wachtwoord in: ", background="yellow")
-inlogWachtwoordPersoonlijk_label.grid(row=1, column=0)
-
-inlogWachtwoordPersoonlijk_entry = tkinter.Entry(master=persoonlijkeInformatieFrame, show="*")
-inlogWachtwoordPersoonlijk_entry.grid(row=1, column=1)
-
-inlogKnopPersoonlijk_button = tkinter.Button(master=persoonlijkeInformatieFrame, text="Log in", command=persoonlijke_informatie_aanvragen)
-inlogKnopPersoonlijk_button.grid(row=2, column=1)
-
-knopterugPersoonlijkeInformatie = tkinter.Button(master= persoonlijkeInformatieFrame, text="Terug", command=toonInformatieFrame)
-knopterugPersoonlijkeInformatie.grid(row=2, column=0, pady=5)
+persoonlijkeInformatie_label = tkinter.Label(master=persoonlijkeInformatieFrame, text=persoonlijke_informatie_aanvragen)
+persoonlijkeInformatie_label.grid(row=0, column=0)
 
 
 toonHoofdFrame()
