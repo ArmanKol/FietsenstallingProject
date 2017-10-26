@@ -11,8 +11,8 @@ import requests
 import xmltodict
 
 
-def filecheck(): #Kijkt of benodigde map en bestanden aanwezig zijn bij de .exe.
-    #Kijk naar de map
+def filecheck(): # Kijkt of benodigde map en bestanden aanwezig zijn bij de .exe.
+    # Kijk naar de map
 
     database_folder = os.getcwd()+"\database"
     if os.path.isdir(database_folder) == False:
@@ -377,7 +377,7 @@ def trein_tijden():
         datum_en_tijd = str(treindata['ActueleVertrekTijd'])
         datum_en_tijd = datum_en_tijd.split("T")
         tijd = datum_en_tijd[1].split(":")
-        uren = int(tijd[0]) + 1
+        uren = int(tijd[0]) + 2
         if uren > 23:
             uren -= 24
 
