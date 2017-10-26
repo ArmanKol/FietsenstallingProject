@@ -1,4 +1,5 @@
 import tkinter
+import os
 import sys
 import csv
 import random
@@ -6,6 +7,25 @@ import tkinter.messagebox
 import datetime
 import pyotp
 import telepot
+
+def filecheck(): #Kijkt of benodigde map en bestanden aanwezig zijn bij de .exe.
+    #Kijk naar de map
+
+    database_folder = os.getcwd()+"\database"
+    if os.path.isdir(database_folder) == False:
+        os.makedirs(database_folder)
+
+    gebruikers_bestand = database_folder+"\gebruikers.csv"
+    if os.path.isfile(gebruikers_bestand) == False:
+        inhoud_gebruikers_bestand = ("fietsnummer;naam;mail;wachtwoord;telefoonnummer\n")
+        schrijf_gebruikers_bestand = open(gebruikers_bestand, 'a')
+        schrijf_gebruikers_bestand.writelines(inhoud_gebruikers_bestand)
+
+    gestald_bestand = database_folder+"\gestald.csv"
+    if os.path.isfile(gestald_bestand) == False:
+        inhoud_gestald_bestand = ("fietsnummer;staldatum\n")
+        schrijf_gestald_bestand = open(gestald_bestand, 'a')
+        schrijf_gestald_bestand.writelines(inhoud_gestald_bestand)
 
 
 def telegram_read():
@@ -186,7 +206,7 @@ def prijs_te_betalen(mail):
                     if int(aantal_dagen_gestald[0]) <= 1:
                         return 0
                     else:
-                        return int(aantal_dagen_gestald[0]) - 1 * 2.5
+                        return (int(aantal_dagen_gestald[0]) - 1) * 2.5
 
 
 def inlog_ophalen():
@@ -325,8 +345,6 @@ def persoonlijke_informatie_aanvragen():
                                                                      command=toonHoofdFrame)
         persoonlijkeInformatie_knop.grid(row=1, column=0)
 
-        toonPersoonlijkeInformatieFrame()
-
         inlogNaamPersoonlijk_entry.delete(0, 'end')
         inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
 
@@ -390,6 +408,8 @@ def toonPersoonlijkeInformatieFrame():
 def toonTreinTijdenFrame():
     informatiemenuFrame.pack_forget()
     treinTijdenFrame.pack(padx=10, pady=10)
+
+filecheck()
 
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
