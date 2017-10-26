@@ -257,6 +257,7 @@ def inlog_ophalen():
 
 
 def algemene_informatie_aanvragen():
+    # gegevens voor algemene informatie
     gegevens = csvread("gestald.csv")
 
     vrije_plekken = 1000 - (len(gegevens) + 1)
@@ -265,14 +266,22 @@ def algemene_informatie_aanvragen():
 
 
 def persoonlijke_informatie_aanvragen():
+    # gegevens voor persoonlijke informatie
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
 
     username = inlogNaamPersoonlijk_entry.get().lower()
     password = inlogWachtwoordPersoonlijk_entry.get()
 
+    stal_datum = "Fiets is niet gestald"
+    prijs_betalen = 0
+    fietsnummer = ''
+    naam = ''
+    telefoonnummer = ''
+
     status_inloggen = 0
 
+    # controleren gegevens gebruiker
     for item in gegevens_gebruiker:
         if str(item['wachtwoord']) == password and str(item['mail']) == username:
             fietsnummer = item['fietsnummer']
@@ -285,11 +294,11 @@ def persoonlijke_informatie_aanvragen():
         pass
 
     # telegram check voor two-factor authenticatie
-    #if status_inloggen == 1:
-    #    status_inloggen =  telegram_check()
-    #else:
-    #    pass
-
+    if status_inloggen == 1:
+        status_inloggen =  telegram_check()
+    else:
+        pass
+    # gegevens ophalen voor persoonlijke informatie en controle of fiets in stalling staat
     if status_inloggen == 1:
         for gebruiker_gegeven in gegevens_gebruiker:
             if username == gebruiker_gegeven['mail']:
@@ -300,41 +309,29 @@ def persoonlijke_informatie_aanvragen():
                 for stal_gegeven in gegevens_gestald:
                     if gebruiker_gegeven['fietsnummer'] == stal_gegeven['fietsnummer']:
                         stal_datum = stal_gegeven['staldatum']
+                        prijs_betalen = prijs_te_betalen(username)
 
-                        persoonlijkeInformatie_label = tkinter.Label(master=persoonlijkeInformatieFrame,text=("Uw unieke fietsnummer: " + str(fietsnummer) +
-                                                    "\nUw naam: " + naam +
-                                                    "\nUw telefoonnummer: " + telefoonnummer +
-                                                    "\nUw e-mail adres: " + username +
-                                                    "\nUw fiets staat gestald sinds: " + str(stal_datum) +
-                                                    "\nDe kosten op dit moment: \u20ac" + str(prijs_te_betalen(username))), background="yellow")
-                        persoonlijkeInformatie_label.grid(row=0, column=0)
+    # weergeven van informatie aan gebruiker
+        persoonlijkeInformatie_label = tkinter.Label(master=persoonlijkeInformatieFrame, text=(
+        "Uw unieke fietsnummer: " + str(fietsnummer) +
+        "\nUw naam: " + naam +
+        "\nUw telefoonnummer: " + telefoonnummer +
+        "\nUw e-mail adres: " + username +
+        "\nUw fiets staat gestald sinds: " + str(stal_datum) +
+        "\nDe kosten op dit moment: \u20ac" + str(prijs_betalen)), background="yellow")
+        persoonlijkeInformatie_label.grid(row=0, column=0)
 
-                        persoonlijkeInformatie_knop= tkinter.Button(master=persoonlijkeInformatieFrame, text="Terug", command=toonHoofdFrame)
-                        persoonlijkeInformatie_knop.grid(row=1, column=0)
+        persoonlijkeInformatie_knop = tkinter.Button(master=persoonlijkeInformatieFrame, text="Terug",
+                                                                     command=toonHoofdFrame)
+        persoonlijkeInformatie_knop.grid(row=1, column=0)
 
-                        toonPersoonlijkeInformatieFrame()
-                        return persoonlijkeInformatie_label
-                    else:
-                        stal_datum = "Fiets is niet gestald."
+        toonPersoonlijkeInformatieFrame()
 
-                        persoonlijkeInformatie_label2= tkinter.Label(master=persoonlijkeInformatieFrame, text=("Uw unieke fietsnummer: " + str(fietsnummer) +
-                                                    "\nUw naam: " + naam +
-                                                    "\nUw telefoonnummer: " + telefoonnummer +
-                                                    "\nUw e-mail adres: " + username +
-                                                    "\nUw fiets staat gestald sinds: " + str(stal_datum) +
-                                                    "\nDe kosten op dit moment: \u20ac0"), background="yellow")
-                        persoonlijkeInformatie_label2.grid(row=0, column=0)
+        inlogNaamPersoonlijk_entry.delete(0, 'end')
+        inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
 
-                        persoonlijkeInformatie_knop2 = tkinter.Button(master=persoonlijkeInformatieFrame, text="Terug",command=toonHoofdFrame)
-                        persoonlijkeInformatie_knop2.grid(row=1, column=0)
-
-                        toonPersoonlijkeInformatieFrame()
-                        return persoonlijkeInformatie_label2
-
-                inlogNaamPersoonlijk_entry.delete(0, 'end')
-                inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
-
-                toonPersoonlijkeInformatieFrame()
+        toonPersoonlijkeInformatieFrame()
+        return persoonlijkeInformatie_label
 
 
 def toonHoofdFrame():
