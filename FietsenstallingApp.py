@@ -606,17 +606,24 @@ treinTijdenFrame = tkinter.Frame(root)
 treinTijdenFrame.configure(background="yellow")
 treinTijdenFrame.pack()
 
-treinTijden_label = tkinter.Label(master=treinTijdenFrame, text="Vul hier je huidige station in: ",background="yellow")
-treinTijden_label.grid(row=0, column=0)
+treinTijdenBeginstation_label = tkinter.Label(master=treinTijdenFrame, text="Beginstation: ",background="yellow")
+treinTijdenBeginstation_label.grid(row=0, column=0, pady=5)
 
-treinTijden_entry = tkinter.Entry(master=treinTijdenFrame)
-treinTijden_entry.grid(row=0, column=1)
+treinTijdenBeginstation_entry = tkinter.Entry(master=treinTijdenFrame)
+treinTijdenBeginstation_entry.grid(row=0, column=1)
+
+treinTijdenEindstation_label = tkinter.Label(master=treinTijdenFrame, text="Eindstation: ",background="yellow")
+treinTijdenEindstation_label.grid(row=1, column=0, pady=5)
+
+treinTijdenEindstation_entry = tkinter.Entry(master=treinTijdenFrame)
+treinTijdenEindstation_entry.grid(row=1, column=1)
+
 
 knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder")
-knopverderTreinTijden.grid(row=1, column=1, pady=5)
+knopverderTreinTijden.grid(row=2, column=1, pady=5)
 
 knopterugTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Terug", command=toonInformatieFrame)
-knopterugTreinTijden.grid(row=1, column=0)
+knopterugTreinTijden.grid(row=2, column=0)
 
 toonHoofdFrame()
 
