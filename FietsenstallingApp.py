@@ -49,10 +49,10 @@ def registreren():
 
     mail_lijst = []
 
-    naam = naam_entry.get().lower()
+    naam = naam_entry.get()
     mail = email_entry.get().lower()
-    wachtwoord = wachtwoord_entry.get().lower()
-    telefoonnummer = telefoonnummer_entry.get().lower()
+    wachtwoord = wachtwoord_entry.get()
+    telefoonnummer = telefoonnummer_entry.get()
 
     # controle of mail al geregistreerd is
     for gegeven in gegevens_gebruikers:
@@ -109,8 +109,8 @@ def inlog_stallen():
     datum = vandaag.strftime('%d/%m/%Y')
 
     username = inlogNaamStallen_entry.get().lower()
-    password = inlogWachtwoordStallen_entry.get().lower()
-    fietsnummer = inlogFietsnummerStallen_entry.get().lower()
+    password = inlogWachtwoordStallen_entry.get()
+    fietsnummer = inlogFietsnummerStallen_entry.get()
 
     status_inloggen = 0
     fietsnummer_lijst = []
@@ -127,11 +127,14 @@ def inlog_stallen():
         pass
 
     # controleren of fiets al in de stalling staat
-    for gegeven in gegevens_gestald:
-        fietsnummer_lijst.append(gegeven['fietsnummer'])
-    if fietsnummer in fietsnummer_lijst:
-        tkinter.messagebox.showinfo("", "Fiets staat al in stalling..")
-        status_inloggen = 0
+    if status_inloggen == 1:
+        for gegeven in gegevens_gestald:
+            fietsnummer_lijst.append(gegeven['fietsnummer'])
+        if fietsnummer in fietsnummer_lijst:
+            tkinter.messagebox.showinfo("", "Fiets staat al in stalling..")
+            status_inloggen = 0
+        else:
+            pass
     else:
         pass
 
@@ -192,8 +195,8 @@ def inlog_ophalen():
     gegevens_gestald = csvread("gestald.csv")
 
     username = inlogNaamOphalen_entry.get().lower()
-    password = inlogWachtwoordOphalen_entry.get().lower()
-    fietsnummer = inlogFietsnummerOphalen_entry.get().lower()
+    password = inlogWachtwoordOphalen_entry.get()
+    fietsnummer = inlogFietsnummerOphalen_entry.get()
 
     status_inloggen = 0
     fietsnummer_lijst = []
@@ -265,7 +268,7 @@ def persoonlijke_informatie_aanvragen():
     gegevens_gebruiker = csvread("gebruikers.csv")
     gegevens_gestald = csvread("gestald.csv")
 
-    username = inlogNaamPersoonlijk_entry.get()
+    username = inlogNaamPersoonlijk_entry.get().lower()
     password = inlogWachtwoordPersoonlijk_entry.get()
 
     status_inloggen = 0
@@ -314,6 +317,7 @@ def persoonlijke_informatie_aanvragen():
 
                 inlogNaamPersoonlijk_entry.delete(0, 'end')
                 inlogWachtwoordPersoonlijk_entry.delete(0, 'end')
+
                 toonHoofdFrame()
 
 
