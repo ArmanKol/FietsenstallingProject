@@ -7,6 +7,9 @@ import tkinter.messagebox
 import datetime
 import pyotp
 import telepot
+import requests
+import xmltodict
+
 
 def filecheck(): #Kijkt of benodigde map en bestanden aanwezig zijn bij de .exe.
     #Kijk naar de map
@@ -352,6 +355,42 @@ def persoonlijke_informatie_aanvragen():
         return persoonlijkeInformatie_label
 
 
+def trein_tijden():
+    try:
+        beginstation = treinTijdenBeginstation_entry.get()
+        eindstation = treinTijdenEindstation_entry.get()
+
+        translater = str.maketrans(" ", "+")
+        eindstation = eindstation.translate(translater)
+
+        api_auth = ('ik_ben_liam@hotmail.com', 'KGCZ67pwlCPtrE2OGj_zVNy3ULYqHKlt0pd91MdxUatUGoGnUJGEgw')
+        api_url = 'http://webservices.ns.nl/ns-api-treinplanner?fromStation=' + beginstation + "&toStation=" + eindstation
+
+        api_request = requests.get(api_url, auth=api_auth)
+
+        request = xmltodict.parse(api_request.text)
+
+        treindata = request['ReisMogelijkheden']['ReisMogelijkheid'][0]
+        datum_en_tijd = str(treindata['ActueleVertrekTijd'])
+        datum_en_tijd = datum_en_tijd.split("T")
+        tijd = datum_en_tijd[1].split(":")
+        uren = int(tijd[0]) + 2
+        if uren > 23:
+            uren -= 24
+
+        tkinter.messagebox.showinfo("", "U moet " + treindata['AantalOverstappen'] + " overstappen." +
+                                    "\nDe geplande reistijd is: " + treindata['GeplandeReisTijd'] +
+                                    "\nActuele vertrektijd: " + str(uren)+":"+str(tijd[1]))
+
+        treinTijdenBeginstation_entry.delete(0, "end")
+        treinTijdenEindstation_entry.delete(0, "end")
+
+        toonHoofdFrame()
+
+    except:
+        tkinter.messagebox.showinfo("", "Dit station is niet gevonden of het is fout getyped.")
+
+
 def toonHoofdFrame():
     registermenuFrame.pack_forget()
     informatiemenuFrame.pack_forget()
@@ -401,13 +440,17 @@ def toonPersoonlijkeInlogFrame():
     informatiemenuFrame.pack_forget()
     persoonlijkeInlogFrame.pack()
 
+
 def toonPersoonlijkeInformatieFrame():
     persoonlijkeInlogFrame.pack_forget()
     persoonlijkeInformatieFrame.pack(padx=10, pady=10)
 
+
 def toonTreinTijdenFrame():
     informatiemenuFrame.pack_forget()
     treinTijdenFrame.pack(padx=10, pady=10)
+
+
 
 filecheck()
 
@@ -619,7 +662,7 @@ treinTijdenEindstation_entry = tkinter.Entry(master=treinTijdenFrame)
 treinTijdenEindstation_entry.grid(row=1, column=1)
 
 
-knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder")
+knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder", command=trein_tijden)
 knopverderTreinTijden.grid(row=2, column=1, pady=5)
 
 knopterugTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Terug", command=toonInformatieFrame)
