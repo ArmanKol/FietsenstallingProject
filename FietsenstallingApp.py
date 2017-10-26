@@ -342,6 +342,7 @@ def toonHoofdFrame():
     ophalenmenuFrame.pack_forget()
     persoonlijkeInlogFrame.pack_forget()
     persoonlijkeInformatieFrame.pack_forget()
+    treinTijdenFrame.pack_forget()
     hoofdmenuFrame.pack(padx=50, pady=10)
 
 
@@ -368,6 +369,7 @@ def toonInformatieFrame():
     hoofdmenuFrame.pack_forget()
     algemeneInformatiemenuFrame.pack_forget()
     persoonlijkeInlogFrame.pack_forget()
+    treinTijdenFrame.pack_forget()
     informatiemenuFrame.pack(padx=50, pady=10)
 
 
@@ -384,6 +386,10 @@ def toonPersoonlijkeInlogFrame():
 def toonPersoonlijkeInformatieFrame():
     persoonlijkeInlogFrame.pack_forget()
     persoonlijkeInformatieFrame.pack(padx=10, pady=10)
+
+def toonTreinTijdenFrame():
+    informatiemenuFrame.pack_forget()
+    treinTijdenFrame.pack(padx=10, pady=10)
 
 root = tkinter.Tk()
 root.title("NS-Fietsenstalling")
@@ -524,8 +530,11 @@ algemeneInformatieKnop.grid(row=0, column=0, pady=5)
 persoonlijkeInformatieKnop = tkinter.Button(master=informatiemenuFrame, text="Persoonlijke informatie", width=25, command=toonPersoonlijkeInlogFrame)
 persoonlijkeInformatieKnop.grid(row=1, column=0, pady=5)
 
+treinTijdenKnop = tkinter.Button(master=informatiemenuFrame, text="Trein tijden", width=25, command=toonTreinTijdenFrame)
+treinTijdenKnop.grid(row=2, column=0, pady=5)
+
 knopterugInformatieOpvragen = tkinter.Button(master=informatiemenuFrame, text="Terug", width=25, command=toonHoofdFrame)
-knopterugInformatieOpvragen.grid(row=2, column=0, pady=5)
+knopterugInformatieOpvragen.grid(row=3, column=0, pady=5)
 
 #informatie opvragen/algemene informatie
 algemeneInformatiemenuFrame = tkinter.Frame(root)
@@ -571,6 +580,23 @@ knopterugPersoonlijkeInformatie.grid(row=2, column=0, pady=5)
 persoonlijkeInformatieFrame = tkinter.Frame(root)
 persoonlijkeInformatieFrame.configure(background="yellow")
 persoonlijkeInformatieFrame.pack()
+
+#Informatie opvragen/trein tijden
+treinTijdenFrame = tkinter.Frame(root)
+treinTijdenFrame.configure(background="yellow")
+treinTijdenFrame.pack()
+
+treinTijden_label = tkinter.Label(master=treinTijdenFrame, text="Vul hier je huidige station in: ",background="yellow")
+treinTijden_label.grid(row=0, column=0)
+
+treinTijden_entry = tkinter.Entry(master=treinTijdenFrame)
+treinTijden_entry.grid(row=0, column=1)
+
+knopverderTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Verder")
+knopverderTreinTijden.grid(row=1, column=1, pady=5)
+
+knopterugTreinTijden = tkinter.Button(master=treinTijdenFrame, text="Terug", command=toonInformatieFrame)
+knopterugTreinTijden.grid(row=1, column=0)
 
 toonHoofdFrame()
 
