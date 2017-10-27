@@ -297,7 +297,7 @@ def algemene_informatie_aanvragen():
     # gegevens voor algemene informatie
     gegevens = csvread("gestald.csv")
 
-    vrije_plekken = 1000 - (len(gegevens) + 1)
+    vrije_plekken = 1000 - len(gegevens)
 
     return vrije_plekken
 
